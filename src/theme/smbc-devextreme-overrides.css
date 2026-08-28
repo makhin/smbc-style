@@ -273,6 +273,11 @@
   background: var(--color-surface-hover);
 }
 
+.dx-tag-content {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+}
+
 /* Popup / dropdown surfaces */
 .dx-overlay-content,
 .dx-popup-wrapper > .dx-overlay-content {

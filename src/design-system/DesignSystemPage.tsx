@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
+import Accordion from 'devextreme-react/accordion';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
 import DataGrid, {
@@ -12,14 +13,22 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import DateBox from 'devextreme-react/date-box';
 import LoadIndicator from 'devextreme-react/load-indicator';
+import NumberBox from 'devextreme-react/number-box';
 import Popup from 'devextreme-react/popup';
 import RadioGroup from 'devextreme-react/radio-group';
 import SelectBox from 'devextreme-react/select-box';
 import Tabs from 'devextreme-react/tabs';
+import TagBox from 'devextreme-react/tag-box';
 import TextArea from 'devextreme-react/text-area';
 import TextBox from 'devextreme-react/text-box';
 import Toast from 'devextreme-react/toast';
-import Validator, { RequiredRule } from 'devextreme-react/validator';
+import ValidationGroup from 'devextreme-react/validation-group';
+import ValidationSummary from 'devextreme-react/validation-summary';
+import Validator, {
+  EmailRule,
+  RangeRule,
+  RequiredRule,
+} from 'devextreme-react/validator';
 import Chart, {
   Legend,
   Series,
@@ -104,6 +113,27 @@ const chartData = [
 
 const countries = ['Poland', 'Germany', 'United Kingdom', 'Japan', 'France'];
 const priorities = ['Standard', 'Urgent', 'Critical'];
+const reviewTeams = [
+  'Payments Operations',
+  'Financial Crime',
+  'Credit Risk',
+  'Relationship Management',
+];
+
+const accordionItems = [
+  {
+    title: 'Payment details',
+    text: 'Core transaction data, settlement instructions, and beneficiary information.',
+  },
+  {
+    title: 'Compliance checks',
+    text: 'Screening results, policy exceptions, and any checks requiring manual review.',
+  },
+  {
+    title: 'Audit history',
+    text: 'A chronological record of changes, decisions, and responsible users.',
+  },
+];
 
 const tabs = [
   { id: 0, text: 'Overview' },
@@ -179,6 +209,7 @@ export default function DesignSystemPage() {
       ['typography', 'Typography'],
       ['buttons', 'Buttons'],
       ['forms', 'Forms'],
+      ['components', 'More components'],
       ['status', 'Status'],
       ['cards', 'Cards'],
       ['filters', 'Filters'],
@@ -231,7 +262,7 @@ export default function DesignSystemPage() {
               accessibility states, and DevExtreme components.
             </p>
           </div>
-          <span className="app-badge app-badge--brand">v1.1</span>
+          <span className="app-badge app-badge--brand">v1.2</span>
         </header>
 
         <Section
@@ -430,6 +461,149 @@ export default function DesignSystemPage() {
                 <div className="app-field ds-checkbox-field">
                   <CheckBox text="Require additional approval" />
                 </div>
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        <Section
+          id="components"
+          title="More DevExtreme components"
+          description="A small set of common application patterns beyond the basic form controls."
+        >
+          <div className="ds-component-grid">
+            <div className="app-card">
+              <div className="app-card__header">
+                <div>
+                  <div className="app-card__title">NumberBox</div>
+                  <div className="app-caption">Formatted numeric input</div>
+                </div>
+              </div>
+              <div className="app-card__body">
+                <div className="app-field">
+                  <label className="app-label" htmlFor="ds-payment-amount">
+                    Payment amount
+                  </label>
+                  <NumberBox
+                    inputAttr={{ id: 'ds-payment-amount' }}
+                    defaultValue={184250.45}
+                    format="#,##0.00"
+                    min={0}
+                    showSpinButtons
+                  />
+                  <span className="app-caption">EUR · minimum 0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="app-card">
+              <div className="app-card__header">
+                <div>
+                  <div className="app-card__title">TagBox</div>
+                  <div className="app-caption">Searchable multiple selection</div>
+                </div>
+              </div>
+              <div className="app-card__body">
+                <div className="app-field">
+                  <label className="app-label" htmlFor="ds-review-teams">
+                    Review teams
+                  </label>
+                  <TagBox
+                    inputAttr={{ id: 'ds-review-teams' }}
+                    items={reviewTeams}
+                    defaultValue={['Payments Operations', 'Financial Crime']}
+                    placeholder="Select teams"
+                    searchEnabled
+                    showSelectionControls
+                    applyValueMode="useButtons"
+                  />
+                  <span className="app-caption">
+                    Search, select several values, then apply.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="app-card ds-component-grid__wide">
+              <div className="app-card__header">
+                <div>
+                  <div className="app-card__title">Accordion</div>
+                  <div className="app-caption">Progressive disclosure for related content</div>
+                </div>
+              </div>
+              <div className="app-card__body">
+                <Accordion
+                  items={accordionItems}
+                  defaultSelectedIndex={0}
+                  collapsible
+                  multiple={false}
+                />
+              </div>
+            </div>
+
+            <div className="app-card ds-component-grid__wide">
+              <div className="app-card__header">
+                <div>
+                  <div className="app-card__title">Validation</div>
+                  <div className="app-caption">
+                    Field-level rules with a form-level summary
+                  </div>
+                </div>
+              </div>
+              <div className="app-card__body">
+                <form
+                  className="ds-validation-form"
+                  onSubmit={(event) => event.preventDefault()}
+                >
+                  <ValidationGroup>
+                    <div className="ds-validation-fields">
+                      <div className="app-field">
+                        <label className="app-label" htmlFor="ds-approver-email">
+                          Approver email *
+                        </label>
+                        <TextBox
+                          inputAttr={{ id: 'ds-approver-email' }}
+                          placeholder="name@smbcgroup.com"
+                        >
+                          <Validator>
+                            <RequiredRule message="Enter the approver email." />
+                            <EmailRule message="Enter a valid email address." />
+                          </Validator>
+                        </TextBox>
+                      </div>
+
+                      <div className="app-field">
+                        <label className="app-label" htmlFor="ds-approval-limit">
+                          Approval limit *
+                        </label>
+                        <NumberBox
+                          inputAttr={{ id: 'ds-approval-limit' }}
+                          defaultValue={0}
+                          format="#,##0.00"
+                          showSpinButtons
+                        >
+                          <Validator>
+                            <RequiredRule message="Enter the approval limit." />
+                            <RangeRule
+                              min={100}
+                              max={1000000}
+                              message="Use a value from 100.00 to 1,000,000.00."
+                            />
+                          </Validator>
+                        </NumberBox>
+                      </div>
+                    </div>
+
+                    <div className="ds-validation-actions">
+                      <ValidationSummary />
+                      <Button
+                        text="Validate fields"
+                        type="default"
+                        useSubmitBehavior
+                      />
+                    </div>
+                  </ValidationGroup>
+                </form>
               </div>
             </div>
           </div>

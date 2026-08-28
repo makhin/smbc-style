@@ -10862,7 +10862,7 @@
   padding-inline-start: 4px;
   padding-inline-end: 20px;
   min-width: 40px;
-  background-color: #ebf1ed;
+  background-color: #f1f5f2;
   color: #1f2522;
   border-radius: 999em;
   border: 1px solid #d8ddd9;
@@ -10938,7 +10938,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #57675f;
+  color: #68716c;
 }
 .dx-tag:hover .dx-tag-content {
   background-color: #fafafa;
@@ -11138,6 +11138,15 @@
   min-height: 32px;
   padding: 6px 8px;
 }
+.dx-accordion-item-title-caption {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  height: 100%;
+  color: #1f2522;
+  font-size: 13px;
+  font-weight: 500;
+}
 .dx-accordion-item-body {
   overflow: hidden;
   padding: 8px;
@@ -11192,15 +11201,6 @@
   font-size: 16px;
   text-align: center;
   line-height: 16px;
-}
-.dx-accordion-item-title-caption {
-  display: flex;
-  align-items: center;
-  flex: 1 1 auto;
-  height: 100%;
-  color: inherit;
-  font-size: 12px;
-  font-weight: 500;
 }
 .dx-accordion-item-title-caption .dx-icon {
   margin-inline-end: 6px;

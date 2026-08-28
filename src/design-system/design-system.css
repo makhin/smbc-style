@@ -259,6 +259,55 @@ html {
   min-height: 58px;
 }
 
+.ds-component-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.ds-component-grid > .app-card {
+  min-width: 0;
+}
+
+.ds-component-grid__wide {
+  grid-column: 1 / -1;
+}
+
+.ds-component-grid .app-field {
+  gap: var(--space-2);
+}
+
+.ds-component-grid .dx-accordion-item-body {
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+.ds-validation-form,
+.ds-validation-form .dx-validationgroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ds-validation-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.ds-validation-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: var(--border-width-default) solid var(--color-border-default);
+}
+
+.ds-validation-actions .dx-validationsummary {
+  flex: 1 1 auto;
+}
+
 .ds-message-grid,
 .ds-state-grid,
 .ds-accessibility-grid {
@@ -460,10 +509,16 @@ html {
   }
 
   .ds-swatch-grid,
+  .ds-component-grid,
   .ds-form-grid,
+  .ds-validation-fields,
   .ds-message-grid,
   .ds-accessibility-grid {
     grid-template-columns: 1fr;
+  }
+
+  .ds-validation-actions {
+    flex-direction: column;
   }
 
   .app-field--wide {
