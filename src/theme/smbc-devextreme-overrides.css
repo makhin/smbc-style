@@ -78,7 +78,17 @@
   border-color: var(--color-action-primary-hover);
 }
 
+.dx-button-mode-contained.dx-button-default.dx-state-focused {
+  background: var(--color-action-primary-hover);
+  border-color: var(--color-action-primary-hover);
+}
+
 .dx-button-mode-contained.dx-button-default.dx-state-active {
+  background: var(--color-action-primary-active);
+  border-color: var(--color-action-primary-active);
+}
+
+.dx-button-mode-contained.dx-button-default.dx-state-selected {
   background: var(--color-action-primary-active);
   border-color: var(--color-action-primary-active);
 }
@@ -87,6 +97,39 @@
   background: var(--color-surface-default);
   border-color: var(--color-action-primary);
   color: var(--color-action-primary);
+}
+
+.dx-button-mode-outlined.dx-button-default:is(.dx-state-hover, .dx-state-focused),
+.dx-button-mode-text.dx-button-default:is(.dx-state-hover, .dx-state-focused) {
+  background: var(--color-surface-hover);
+  color: var(--color-action-primary-hover);
+}
+
+.dx-button-mode-outlined.dx-button-default.dx-state-selected,
+.dx-button-mode-text.dx-button-default.dx-state-selected {
+  background: var(--color-surface-selected);
+  color: var(--color-action-primary);
+}
+
+.dx-button-mode-outlined.dx-button-default.dx-state-active,
+.dx-button-mode-text.dx-button-default.dx-state-active {
+  background: var(--color-action-primary-muted);
+  color: var(--color-action-primary-active);
+}
+
+.dx-button-mode-outlined.dx-button-default:is(
+  .dx-state-hover,
+  .dx-state-focused,
+  .dx-state-selected,
+  .dx-state-active
+) .dx-icon,
+.dx-button-mode-text.dx-button-default:is(
+  .dx-state-hover,
+  .dx-state-focused,
+  .dx-state-selected,
+  .dx-state-active
+) .dx-icon {
+  color: inherit;
 }
 
 .dx-button.dx-state-focused {
@@ -257,6 +300,39 @@
   color: var(--color-text-primary);
 }
 
+.dx-toolbar-menu-section
+  .dx-toolbar-hidden-button
+  .dx-button-default:is(.dx-state-hover, .dx-state-focused) {
+  background: var(--color-surface-hover);
+  color: var(--color-action-primary-hover);
+}
+
+.dx-toolbar-menu-section
+  .dx-toolbar-hidden-button
+  .dx-button-default.dx-state-selected {
+  background: var(--color-surface-selected);
+  color: var(--color-action-primary);
+}
+
+.dx-toolbar-menu-section
+  .dx-toolbar-hidden-button
+  .dx-button-default.dx-state-active {
+  background: var(--color-action-primary-muted);
+  color: var(--color-action-primary-active);
+}
+
+.dx-toolbar-menu-section
+  .dx-toolbar-hidden-button
+  .dx-button-default:is(
+    .dx-state-hover,
+    .dx-state-focused,
+    .dx-state-selected,
+    .dx-state-active
+  )
+  .dx-icon {
+  color: inherit;
+}
+
 /* Calendar */
 .dx-calendar-cell.dx-calendar-selected-date,
 .dx-calendar-cell.dx-calendar-selected-date.dx-state-hover {
@@ -264,12 +340,165 @@
   color: var(--color-text-inverse);
 }
 
+.dx-calendar-cell.dx-calendar-selected-date span,
+.dx-calendar-cell.dx-calendar-selected-date.dx-state-hover span {
+  background: var(--color-action-primary);
+  color: var(--color-text-inverse);
+}
+
+.dx-calendar-cell.dx-state-hover span {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.dx-calendar-cell.dx-state-active span {
+  background: var(--color-action-primary-muted);
+  color: var(--color-text-primary);
+}
+
+.dx-calendar-cell.dx-calendar-contoured-date span {
+  box-shadow: 0 0 0 var(--outline-width) var(--color-action-primary);
+}
+
+.dx-calendar-cell-in-range::before {
+  background: var(--color-surface-selected);
+  border-color: var(--color-action-accent) transparent;
+}
+
+.dx-calendar-cell-range-hover::after {
+  border-color: var(--color-action-primary) transparent;
+}
+
+.dx-calendar-cell-in-range:is(
+  .dx-calendar-range-start-date,
+  .dx-calendar-cell-start-in-row,
+  .dx-calendar-cell-start
+)::before,
+.dx-calendar-cell-range-hover:is(
+  .dx-calendar-cell-range-hover-start,
+  .dx-calendar-cell-start-in-row,
+  .dx-calendar-cell-start
+)::after {
+  border-inline-start-color: var(--color-action-accent);
+}
+
+.dx-calendar-cell-in-range:is(
+  .dx-calendar-range-end-date,
+  .dx-calendar-cell-end-in-row,
+  .dx-calendar-cell-end
+)::before,
+.dx-calendar-cell-range-hover:is(
+  .dx-calendar-cell-range-hover-end,
+  .dx-calendar-cell-end-in-row,
+  .dx-calendar-cell-end
+)::after {
+  border-inline-end-color: var(--color-action-accent);
+}
+
+.dx-calendar-cell.dx-calendar-other-view:is(
+  .dx-calendar-cell-in-range,
+  .dx-calendar-cell-range-hover,
+  .dx-calendar-range-start-date,
+  .dx-calendar-range-end-date
+).dx-state-hover span {
+  background: var(--color-surface-hover);
+}
+
+.dx-calendar-cell.dx-calendar-other-view:is(
+  .dx-calendar-cell-in-range,
+  .dx-calendar-cell-range-hover,
+  .dx-calendar-range-start-date,
+  .dx-calendar-range-end-date
+).dx-state-active span {
+  background: var(--color-action-primary-muted);
+}
+
 .dx-calendar-cell.dx-calendar-today {
   color: var(--color-action-primary);
   font-weight: var(--font-weight-bold);
 }
 
+/* Scheduler's compact appointment toolbar bypasses the regular button modes. */
+.dx-popup-content
+  .dx-scheduler-dropdown-appointment-buttons-block
+  .dx-button:is(.dx-state-hover, .dx-state-focused) {
+  background: var(--color-surface-hover);
+  color: var(--color-action-primary-hover);
+}
+
+.dx-popup-content
+  .dx-scheduler-dropdown-appointment-buttons-block
+  .dx-button.dx-state-selected {
+  background: var(--color-surface-selected);
+  color: var(--color-action-primary);
+}
+
+.dx-popup-content
+  .dx-scheduler-dropdown-appointment-buttons-block
+  .dx-button.dx-state-active {
+  background: var(--color-action-primary-muted);
+  color: var(--color-action-primary-active);
+}
+
+.dx-popup-content
+  .dx-scheduler-dropdown-appointment-buttons-block
+  .dx-button:is(
+    .dx-state-hover,
+    .dx-state-focused,
+    .dx-state-selected,
+    .dx-state-active
+  )
+  .dx-icon {
+  color: inherit;
+}
+
+/* Fluent does not expose the focused appointment fill in ThemeBuilder metadata. */
+.dx-scheduler-appointment
+  .dx-scheduler-appointment:not(
+    .dx-scheduler-appointment-has-resource-color,
+    .dx-scheduler-appointment-drag-source
+  )::before,
+.dx-scheduler-appointment.dx-state-focused:not(
+  .dx-scheduler-appointment-has-resource-color,
+  .dx-scheduler-appointment-drag-source
+)::before,
+.dx-scheduler-fixed-appointments
+  .dx-draggable-dragging
+  .dx-scheduler-appointment:not(
+    .dx-scheduler-appointment-has-resource-color,
+    .dx-scheduler-appointment-drag-source
+  )::before,
+.dx-scheduler-fixed-appointments
+  .dx-draggable-dragging.dx-state-focused:not(
+    .dx-scheduler-appointment-has-resource-color,
+    .dx-scheduler-appointment-drag-source
+  )::before {
+  background: var(--color-action-primary-muted);
+}
+
 /* Progress / load indication */
+.dx-loadindicator-content-sparkle .dx-loadindicator-segment {
+  background: var(--color-action-primary);
+}
+
+@keyframes dx-sparkle-scale {
+  0%,
+  100% {
+    background: var(--color-action-primary);
+    transform: scale(0.33);
+  }
+
+  33% {
+    background: var(--color-action-accent);
+    transform: scale(1);
+  }
+
+  66% {
+    background: var(--color-action-primary-hover);
+    transform: scale(0.66);
+  }
+}
+
 .dx-progressbar-range {
   background: var(--color-action-primary);
 }
