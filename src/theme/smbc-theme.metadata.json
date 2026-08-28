@@ -1,0 +1,33 @@
+{
+  "items": [
+    {
+      "key": "$base-accent",
+      "value": "#004831"
+    },
+    {
+      "key": "$base-text-color",
+      "value": "#1f2522"
+    },
+    {
+      "key": "$base-bg",
+      "value": "#ffffff"
+    },
+    {
+      "key": "$base-border-color",
+      "value": "#d8ddd9"
+    },
+    {
+      "key": "$base-border-radius",
+      "value": "3px"
+    },
+    {
+      "key": "$base-font-family",
+      "value": "myriad-pro, Myriad Pro, Arial, sans-serif"
+    }
+  ],
+  "baseTheme": "fluent.blue.light.compact",
+  "outputColorScheme": "smbc",
+  "makeSwatch": false,
+  "version": "25.1.13",
+  "assetsBasePath": "../../node_modules/devextreme/dist/css/"
+}
