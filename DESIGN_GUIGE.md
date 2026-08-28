@@ -1,6 +1,6 @@
 # SMBC Application UI Guide
 
-**Version:** 2.0  
+**Version:** 0.1  
 **Scope:** this React + TypeScript repository  
 **UI foundation:** DevExtreme 25.1, Fluent Blue Light Compact  
 **Visual reference:** SMBC EMEA
