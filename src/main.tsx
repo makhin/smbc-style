@@ -1,4 +1,4 @@
-import './theme/app-styles/index.css';
+import './styles/index.css';
 import './theme/dx.smbc.css';
 import './theme/smbc-devextreme-overrides.css';
 import './theme/smbc-viz-palette';

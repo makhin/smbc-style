@@ -14,7 +14,7 @@ npm run theme:build
 npm run build
 ```
 
-Run `theme:build` after changing mapped design tokens or ThemeBuilder settings. It synchronizes metadata from the canonical values in `src/theme/app-styles/tokens.css`, then regenerates `src/theme/dx.smbc.css`. Keep the generated metadata and CSS under source control; do not edit the generated CSS manually.
+Run `theme:build` after changing mapped design tokens or ThemeBuilder settings. It synchronizes metadata from the canonical values in `src/theme/tokens.css`, then regenerates `src/theme/dx.smbc.css`. Keep the generated metadata and CSS under source control; do not edit the generated CSS manually.
 
 ## Routes
 
@@ -42,12 +42,12 @@ Global styles are loaded in this order from `src/main.tsx`:
 
 ## Design tokens
 
-`src/theme/app-styles/tokens.css` is the source of truth for the application and DevExtreme integration:
+`src/theme/tokens.css` is the source of truth for the application and DevExtreme integration:
 
 - palette primitives define raw brand, neutral, feedback, and data-visualisation values;
 - semantic colour roles describe intent such as text, surface, border, action, navigation, and feedback;
 - components consume semantic roles rather than palette primitives;
-- typography, spacing, radius, outline, shadow, layout, and motion scales live alongside the colour tokens;
+- typography, spacing, radius, outline, shadow, and motion scales live alongside the colour tokens;
 - `scripts/sync-devextreme-theme.mjs` resolves the relevant semantic values into ThemeBuilder metadata;
 - `smbc-viz-palette.ts` reads chart colours from the same CSS tokens at runtime.
 

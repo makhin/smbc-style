@@ -5,7 +5,7 @@
 
 @font-face {
   font-family: "myriad-pro";
-  src: url("../../assets/fonts/myriad-pro-light.woff2") format("woff2");
+  src: url("../assets/fonts/myriad-pro-light.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
   font-weight: 300;
@@ -13,7 +13,7 @@
 
 @font-face {
   font-family: "myriad-pro";
-  src: url("../../assets/fonts/myriad-pro-regular.woff2") format("woff2");
+  src: url("../assets/fonts/myriad-pro-regular.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
   font-weight: 400;
@@ -21,7 +21,7 @@
 
 @font-face {
   font-family: "myriad-pro";
-  src: url("../../assets/fonts/myriad-pro-bold.woff2") format("woff2");
+  src: url("../assets/fonts/myriad-pro-bold.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
   font-weight: 700;
@@ -29,7 +29,7 @@
 
 @font-face {
   font-family: "capitolium-2";
-  src: url("../../assets/fonts/capitolium-2-bold.woff2") format("woff2");
+  src: url("../assets/fonts/capitolium-2-bold.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
   font-weight: 700;

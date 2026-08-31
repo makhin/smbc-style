@@ -1,4 +1,13 @@
 .site-layout {
+  --global-header-height: 87px;
+  --global-header-content-max-width: none;
+  --global-header-inline-padding: var(--space-4);
+  --global-header-border-width: 5px;
+  --global-header-menu-line-offset: 9px;
+  --global-header-menu-line-offset-negative: -9px;
+  --brand-logo-width: 146px;
+  --brand-logo-height: 42px;
+
   min-height: 100vh;
   background: var(--color-page-background);
 }

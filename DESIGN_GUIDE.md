@@ -1,6 +1,6 @@
 # SMBC Application UI Guide
 
-**Version:** 0.1  
+**Version:** 0.2
 **Scope:** this React + TypeScript repository  
 **UI foundation:** DevExtreme 25.1, Fluent Blue Light Compact  
 **Visual reference:** SMBC EMEA
@@ -22,8 +22,9 @@ widget layer—not a default DevExtreme application recoloured green.
 Use this order when implementation details conflict:
 
 1. Approved internal SMBC standards.
-2. `src/theme/app-styles/tokens.css` for reusable visual values.
-3. Shared application styles and DevExtreme overrides.
+2. `src/theme/tokens.css` for reusable visual values.
+3. Shared application patterns in `src/styles` and DevExtreme overrides in
+   `src/theme/smbc-devextreme-overrides.css`.
 4. `/design-system` for rendered states and regression review.
 5. Page-specific styles only for local layout constraints.
 
@@ -40,6 +41,8 @@ Rules:
 
 ```text
 src/
+  main.tsx
+  index.css
   app/
     App.tsx
     router.tsx
@@ -49,29 +52,147 @@ src/
   assets/fonts/
   design-system/
     DesignSystemPage.tsx
+    components/
+      Section.tsx
+      section.css
+    data/
+    sections/
     design-system.css
+  styles/
+    fonts.css
+    typography.css
+    layout.css
+    components.css
+    pages.css
+    index.css
   theme/
-    app-styles/
-      fonts.css
-      tokens.css
-      typography.css
-      layout.css
-      components.css
-      pages.css
-      index.css
+    tokens.css
     smbc-theme.metadata.json
     dx.smbc.css
     smbc-devextreme-overrides.css
     smbc-viz-palette.ts
 ```
 
+### Directory responsibilities
+
+| Path | Owns | Must not own |
+|---|---|---|
+| `src/theme/` | Brand and semantic tokens, ThemeBuilder input/output, global DevExtreme corrections, and the chart palette bridge | Application shell layout, page composition, reference-page demos, or one-off component dimensions |
+| `src/styles/` | Application-level primitives and reusable `.app-*` patterns | Brand palette definitions, generated vendor CSS, or styles used only by `/design-system` |
+| `src/app/` | Routing, the root shell, global navigation, and application-specific React components | Theme generation or reference-page examples |
+| `src/design-system/` | The development reference page, demonstrations, regression surface, and demo fixtures | Production business components or the canonical implementation of a shared style |
+| `src/assets/` | Locally bundled fonts and other static brand assets | Remote asset references or component styles |
+
+### Theme ownership
+
+`src/theme/tokens.css` contains reusable visual decisions: palette primitives,
+semantic colours, type scale, spacing, shape, borders, shadows, motion, and
+focus roles. Components consume semantic tokens whenever one exists. A value
+belongs here only when changing it should consistently affect multiple
+components or application surfaces.
+
+Layout dimensions owned by one component remain with that component. For
+example, global-header dimensions live in `app/global-header.css`, application
+shell dimensions live in `styles/layout.css`, and reference-page dimensions
+live in `design-system/design-system.css`.
+
+The remaining theme files have narrow responsibilities:
+
+- `smbc-theme.metadata.json` is ThemeBuilder configuration updated by the theme
+  synchronisation script;
+- `dx.smbc.css` is generated vendor CSS and must never be edited manually;
+- `smbc-devextreme-overrides.css` contains shared corrections that cannot be
+  expressed through the public DevExtreme API or ThemeBuilder metadata;
+- `smbc-viz-palette.ts` exposes semantic CSS colours to DevExtreme charts.
+
+### Shared application-style ownership
+
+`src/styles/index.css` is an import manifest only. It defines the global loading
+order and should not contain selectors. The imported files are divided by
+purpose:
+
+- `fonts.css` registers locally bundled font files;
+- `typography.css` owns the document baseline and reusable text helpers;
+- `layout.css` owns reusable shell, page-header, grid, row, and stack patterns;
+- `components.css` owns reusable application components such as cards, badges,
+  filters, callouts, KPI blocks, empty states, and table shells;
+- `pages.css` owns compositions shared by a class of pages, such as review/detail
+  splits and sticky workflow action bars.
+
+Use `.app-*` for shared application patterns. A page-specific arrangement stays
+co-located with its page until it has a stable meaning and at least one other
+real consumer. File size alone is not a reason to promote local CSS into this
+directory.
+
+Small DevExtreme integration rules are allowed here when they apply only inside
+an `.app-*` pattern, for example removing a nested grid border inside a table
+shell. A correction to DevExtreme itself belongs in
+`smbc-devextreme-overrides.css`.
+
+### Application ownership
+
+`src/app` owns runtime composition. `App.tsx` installs the router,
+`router.tsx` defines routes, and `RootLayout.tsx` provides cross-route structure.
+React components in this directory may have co-located CSS when the rules belong
+only to that component. `global-header.css`, for example, owns header structure,
+responsive behaviour, and its private dimensions; it still consumes colours,
+spacing, motion, and focus tokens from the theme.
+
+### Design-system reference ownership
+
+`src/design-system` documents and exercises the implementation; it does not
+replace it. Its parts are divided as follows:
+
+- `DesignSystemPage.tsx` composes navigation, page chrome, and section
+  components;
+- `components/Section.tsx` and its co-located `section.css` provide
+  reference-page-only section framing;
+- `sections/` contains one independently maintainable rendered example per
+  topic, with interactive state kept in the section that owns it;
+- `data/*.json` contains serialisable demo fixtures and option lists only;
+- `design-system.css` owns `.ds-*` page chrome, demo layouts, visual samples,
+  responsive behaviour, and scoped adjustments needed to present examples.
+
+Do not import `design-system/data` or `.ds-*` classes into production
+application code. Keep mappings, event handlers, component configuration, and
+TypeScript types in `.ts`/`.tsx`; use JSON only for static data that contains no
+behaviour. If a useful pattern first appears in the reference page, implement it
+under `src/styles` or as a production component, then make the reference page
+consume that shared implementation.
+
+### Placement decision
+
+When adding a style, use this order:
+
+1. Use an existing semantic token or shared `.app-*` pattern.
+2. If it is a reusable visual value, add it to `theme/tokens.css`.
+3. If it is a reusable application structure, add it to the appropriate file
+   under `styles/`.
+4. If it corrects DevExtreme globally and cannot be configured through its API
+   or ThemeBuilder, add the smallest possible rule to
+   `smbc-devextreme-overrides.css`.
+5. Otherwise keep it with the owning application component or page.
+6. Keep reference-only presentation under `design-system/` even when that file
+   is relatively large.
+
+Selector prefixes communicate the same ownership boundary:
+
+- `--color-*`, `--space-*`, and similar semantic custom properties are theme
+  tokens;
+- `.app-*` is a reusable application contract;
+- `.ds-*` is private to the design-system reference;
+- component-specific selectors such as `.global-header*` stay with their React
+  component;
+- `.dx-*` selectors outside a scoped `.app-*` or `.ds-*` container belong only
+  in the shared DevExtreme override layer.
+
 Routes:
 
 - `/` redirects to `/design-system`.
 - `/design-system` renders the component and token reference.
 
-`App.tsx` belongs in `src/app`. All routes render inside `RootLayout`, which
-provides the skip link and global header. `index.html` must retain:
+All routes render inside `RootLayout`, which provides the skip link and global
+header. `index.html` must retain:
 
 ```html
 <body class="dx-viewport">
@@ -98,8 +219,9 @@ When a mapped token or ThemeBuilder setting changes, run:
 npm run theme:build
 ```
 
-This synchronises metadata from `tokens.css` before regenerating the theme.
-The `devextreme` and `devextreme-themebuilder` versions must remain compatible.
+This synchronises metadata from `src/theme/tokens.css` before regenerating the
+theme. The `devextreme` and `devextreme-themebuilder` versions must remain
+compatible.
 
 ## 5. Typography and local assets
 
@@ -337,6 +459,7 @@ Breakpoints are layout tools, not minimum accessibility widths.
 
 Before considering UI work complete, confirm:
 
+- each new style and demo fixture lives in the layer that owns it;
 - semantic tokens are used and no duplicate local theme rule was added;
 - DevExtreme APIs were preferred over internal CSS selectors;
 - default, hover, focus, active, invalid, disabled, and read-only states work;

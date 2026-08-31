@@ -11,6 +11,9 @@ html:has(.ds-page) {
 }
 
 .ds-page {
+  --reference-content-max-width: 1500px;
+  --reference-sidebar-width: 224px;
+
   display: grid;
   grid-template-columns: var(--reference-sidebar-width) minmax(0, 1fr);
   min-height: calc(100vh - var(--global-header-height));
@@ -114,37 +117,6 @@ html:has(.ds-page) {
   text-transform: uppercase;
 }
 
-.ds-section {
-  scroll-margin-top: calc(var(--global-header-height) + var(--space-4));
-  padding: var(--space-8) 0;
-  border-bottom: var(--border-width-default) solid var(--color-border-default);
-}
-
-.ds-section__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-4);
-  margin-bottom: var(--space-5);
-}
-
-.ds-section__header p {
-  max-width: 780px;
-  margin-top: var(--space-1);
-}
-
-.ds-anchor {
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 var(--space-8);
-  width: var(--space-8);
-  min-height: var(--space-8);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-xl);
-  text-decoration: none;
-}
-
-.ds-section__content,
 .ds-subsection {
   display: flex;
   flex-direction: column;
@@ -506,7 +478,6 @@ html:has(.ds-page) {
   }
 
   .ds-hero,
-  .ds-section__header,
   .ds-footer {
     flex-direction: column;
   }

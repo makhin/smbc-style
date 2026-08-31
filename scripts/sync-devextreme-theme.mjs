@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
-const tokensPath = new URL('../src/theme/app-styles/tokens.css', import.meta.url);
+const tokensPath = new URL('../src/theme/tokens.css', import.meta.url);
 const metadataPath = new URL('../src/theme/smbc-theme.metadata.json', import.meta.url);
 const packagePath = new URL('../node_modules/devextreme-themebuilder/package.json', import.meta.url);
 

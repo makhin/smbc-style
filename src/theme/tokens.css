@@ -149,21 +149,6 @@
   --shadow-card: 0 1px 2px rgb(0 72 49 / 5%);
   --shadow-popup: 0 8px 24px rgb(0 72 49 / 12%);
 
-  /* Layout */
-  --sidebar-width: 248px;
-  --topbar-height: 56px;
-  --content-max-width: 1600px;
-  --reference-content-max-width: 1500px;
-  --reference-sidebar-width: 224px;
-  --global-header-height: 87px;
-  --global-header-content-max-width: none;
-  --global-header-inline-padding: var(--space-4);
-  --global-header-border-width: 5px;
-  --global-header-menu-line-offset: 9px;
-  --global-header-menu-line-offset-negative: -9px;
-  --brand-logo-width: 146px;
-  --brand-logo-height: 42px;
-
   /* Motion */
   --transition-fast: 120ms ease;
   --transition-normal: 180ms ease;
