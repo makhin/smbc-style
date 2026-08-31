@@ -148,7 +148,8 @@ replace it. Its parts are divided as follows:
 - `components/Section.tsx` and its co-located `section.css` provide
   reference-page-only section framing;
 - `sections/` contains one independently maintainable rendered example per
-  topic, with interactive state kept in the section that owns it;
+  topic, with interactive state kept in the section that owns it; a section may
+  import co-located CSS for a rule private to that example;
 - `data/*.json` contains serialisable demo fixtures and option lists only;
 - `design-system.css` owns `.ds-*` page chrome, demo layouts, visual samples,
   responsive behaviour, and scoped adjustments needed to present examples.

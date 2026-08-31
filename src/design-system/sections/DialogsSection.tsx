@@ -6,6 +6,8 @@ import Toast from 'devextreme-react/toast';
 
 import Section from '../components/Section';
 
+import './dialogs-section.css';
+
 export default function DialogsSection() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
@@ -26,6 +28,7 @@ export default function DialogsSection() {
       </div>
 
       <Popup
+        elementAttr={{ class: 'ds-overlay-host' }}
         visible={popupVisible}
         width={600}
         height="auto"
@@ -62,6 +65,7 @@ export default function DialogsSection() {
       </Popup>
 
       <Toast
+        elementAttr={{ class: 'ds-overlay-host' }}
         visible={toastVisible}
         message="Payment approved."
         type="success"
