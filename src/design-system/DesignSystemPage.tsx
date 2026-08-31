@@ -14,20 +14,40 @@ import TypographySection from './sections/TypographySection';
 
 import './design-system.css';
 
-const navigation = [
-  ['foundations', 'Foundations'],
-  ['typography', 'Typography'],
-  ['buttons', 'Buttons'],
-  ['forms', 'Forms'],
-  ['components', 'More components'],
-  ['status', 'Status'],
-  ['cards', 'Cards'],
-  ['filters', 'Filters'],
-  ['grid', 'DataGrid'],
-  ['dialogs', 'Dialogs & feedback'],
-  ['states', 'States'],
-  ['charts', 'Charts'],
-  ['accessibility', 'Accessibility'],
+const sections = [
+  {
+    id: 'foundations',
+    navigationLabel: 'Foundations',
+    Component: FoundationsSection,
+  },
+  {
+    id: 'typography',
+    navigationLabel: 'Typography',
+    Component: TypographySection,
+  },
+  { id: 'buttons', navigationLabel: 'Buttons', Component: ButtonsSection },
+  { id: 'forms', navigationLabel: 'Forms', Component: FormsSection },
+  {
+    id: 'components',
+    navigationLabel: 'More components',
+    Component: ComponentsSection,
+  },
+  { id: 'status', navigationLabel: 'Status', Component: StatusSection },
+  { id: 'cards', navigationLabel: 'Cards', Component: CardsSection },
+  { id: 'filters', navigationLabel: 'Filters', Component: FiltersSection },
+  { id: 'grid', navigationLabel: 'DataGrid', Component: DataGridSection },
+  {
+    id: 'dialogs',
+    navigationLabel: 'Dialogs & feedback',
+    Component: DialogsSection,
+  },
+  { id: 'states', navigationLabel: 'States', Component: StatesSection },
+  { id: 'charts', navigationLabel: 'Charts', Component: ChartsSection },
+  {
+    id: 'accessibility',
+    navigationLabel: 'Accessibility',
+    Component: AccessibilitySection,
+  },
 ] as const;
 
 export default function DesignSystemPage() {
@@ -40,9 +60,9 @@ export default function DesignSystemPage() {
         </div>
 
         <nav>
-          {navigation.map(([href, label]) => (
-            <a key={href} href={`#${href}`}>
-              {label}
+          {sections.map(({ id, navigationLabel }) => (
+            <a key={id} href={`#${id}`}>
+              {navigationLabel}
             </a>
           ))}
         </nav>
@@ -61,19 +81,9 @@ export default function DesignSystemPage() {
           <span className="app-badge app-badge--brand">v1.2</span>
         </header>
 
-        <FoundationsSection />
-        <TypographySection />
-        <ButtonsSection />
-        <FormsSection />
-        <ComponentsSection />
-        <StatusSection />
-        <CardsSection />
-        <FiltersSection />
-        <DataGridSection />
-        <DialogsSection />
-        <StatesSection />
-        <ChartsSection />
-        <AccessibilitySection />
+        {sections.map(({ id, Component }) => (
+          <Component key={id} />
+        ))}
 
         <footer className="ds-footer">
           <span>SMBC Application Design System</span>
