@@ -66,6 +66,10 @@
   min-width: 0;
 }
 
+.app-field > .dx-radiogroup {
+  margin-top: calc(-1 * var(--space-1));
+}
+
 .app-field--wide {
   grid-column: span 2;
 }

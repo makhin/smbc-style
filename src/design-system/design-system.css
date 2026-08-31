@@ -6,7 +6,7 @@
  * page itself.
  */
 
-html {
+html:has(.ds-page) {
   scroll-behavior: smooth;
 }
 
@@ -134,8 +134,11 @@ html {
 }
 
 .ds-anchor {
-  flex: 0 0 auto;
-  padding: var(--space-1);
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 var(--space-8);
+  width: var(--space-8);
+  min-height: var(--space-8);
   color: var(--color-text-secondary);
   font-size: var(--font-size-xl);
   text-decoration: none;
@@ -520,14 +523,10 @@ html {
   .ds-validation-actions {
     flex-direction: column;
   }
-
-  .app-field--wide {
-    grid-column: auto;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:has(.ds-page) {
     scroll-behavior: auto;
   }
 

@@ -69,3 +69,14 @@
     position: static;
   }
 }
+
+@media (max-width: 760px) {
+  .app-details {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-1);
+  }
+
+  .app-details dd:not(:last-child) {
+    margin-bottom: var(--space-2);
+  }
+}

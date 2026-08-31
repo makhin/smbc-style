@@ -151,6 +151,19 @@
 }
 
 /* CheckBox / Radio / Switch */
+.dx-checkbox,
+.dx-radiobutton {
+  min-height: var(--space-8);
+}
+
+.dx-checkbox {
+  min-width: var(--space-8);
+}
+
+.dx-checkbox .dx-checkbox-container {
+  min-height: var(--space-8);
+}
+
 .dx-checkbox-checked .dx-checkbox-icon {
   background: var(--color-action-primary);
   border-color: var(--color-action-primary);
@@ -168,6 +181,10 @@
   background: var(--color-action-primary);
 }
 
+.dx-radiogroup .dx-radiobutton {
+  margin-block: 0;
+}
+
 .dx-switch-on-value .dx-switch-container {
   border-color: var(--color-action-primary);
   background: var(--color-action-primary-muted);
@@ -182,6 +199,24 @@
 .dx-treelist {
   color: var(--color-text-primary);
   background: var(--color-surface-default);
+}
+
+.dx-datagrid .dx-header-filter,
+.dx-datagrid-container .dx-header-filter,
+.dx-treelist .dx-header-filter,
+.dx-treelist-container .dx-header-filter {
+  display: inline-grid;
+  place-items: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  padding: var(--space-1);
+}
+
+.dx-datagrid .dx-select-checkbox .dx-checkbox-container,
+.dx-datagrid-container .dx-select-checkbox .dx-checkbox-container,
+.dx-treelist .dx-select-checkbox .dx-checkbox-container,
+.dx-treelist-container .dx-select-checkbox .dx-checkbox-container {
+  justify-content: center;
 }
 
 .dx-datagrid-headers,
@@ -482,30 +517,36 @@
 }
 
 /* Progress / load indication */
-.dx-loadindicator-content-sparkle .dx-loadindicator-segment {
-  background: var(--color-action-primary);
-}
-
-@keyframes dx-sparkle-scale {
-  0%,
-  100% {
-    background: var(--color-action-primary);
-    transform: scale(0.33);
-  }
-
-  33% {
-    background: var(--color-action-accent);
-    transform: scale(1);
-  }
-
-  66% {
-    background: var(--color-action-primary-hover);
-    transform: scale(0.66);
-  }
-}
-
 .dx-progressbar-range {
   background: var(--color-action-primary);
+}
+
+/* ThemeBuilder does not expose these Fluent component colours as inputs. */
+.dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell::before,
+.dx-scheduler-time-panel-cell.dx-scheduler-time-panel-current-time-cell::before,
+.dx-scheduler-date-time-indicator,
+.dx-scheduler-timeline
+  .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell::after {
+  background-color: var(--color-feedback-danger);
+}
+
+.dx-scheduler-date-time-indicator::before {
+  color: var(--color-feedback-danger);
+}
+
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent {
+  background-color: var(--color-feedback-success);
+  border-left-color: var(--color-feedback-success);
+  border-right-color: var(--color-feedback-success);
+  border-top-color: var(--color-feedback-success);
+}
+
+.dx-gantt
+  .dx-gantt-taskWrapper
+  .dx-gantt-task.dx-gantt-parent.dx-gantt-cmpl
+  .dx-gantt-tPrg::after {
+  border-right-color: var(--color-feedback-success);
+  border-top-color: var(--color-feedback-success);
 }
 
 /*

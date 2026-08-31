@@ -162,7 +162,7 @@ Business state must always include text or another non-colour cue.
 
 ## 7. Spacing, shape, and motion
 
-Use the shared 4px spacing scale:
+Use the shared 4px-based spacing scale with a 2px half-step:
 
 ```text
 2, 4, 8, 12, 16, 20, 24, 32, 40, 48px

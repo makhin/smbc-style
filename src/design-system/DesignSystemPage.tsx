@@ -288,7 +288,7 @@ export default function DesignSystemPage() {
           <div className="ds-subsection">
             <h3>Spacing scale</h3>
             <div className="ds-spacing-row">
-              {[4, 8, 12, 16, 20, 24, 32, 40, 48].map((value) => (
+              {[2, 4, 8, 12, 16, 20, 24, 32, 40, 48].map((value) => (
                 <div className="ds-spacing-item" key={value}>
                   <div style={{ width: value, height: value }} />
                   <span>{value}px</span>
@@ -320,7 +320,7 @@ export default function DesignSystemPage() {
               </div>
               <div>
                 <span className="ds-type-meta">Application page title · Myriad Pro 24 / 600</span>
-                <h1>Payment Review</h1>
+                <div className="app-page-title">Payment Review</div>
               </div>
               <div>
                 <span className="ds-type-meta">Application section · Myriad Pro 20 / 600</span>
@@ -928,7 +928,8 @@ export default function DesignSystemPage() {
                   valueField="pending"
                   argumentField="day"
                   name="Pending"
-                  type="bar"
+                  type="line"
+                  dashStyle="dash"
                 />
                 <Legend verticalAlignment="top" horizontalAlignment="right" />
               </Chart>
