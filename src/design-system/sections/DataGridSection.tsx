@@ -13,7 +13,7 @@ import paymentsData from '../data/payments.json';
 
 type PaymentStatus =
   | 'Pending'
-  | 'Under Review'
+  | 'Under review'
   | 'Approved'
   | 'Rejected'
   | 'Cancelled'
@@ -31,7 +31,7 @@ type PaymentRow = {
 
 const statusClass: Record<PaymentStatus, string> = {
   Pending: 'app-badge app-badge--info',
-  'Under Review': 'app-badge app-badge--warning',
+  'Under review': 'app-badge app-badge--warning',
   Approved: 'app-badge app-badge--success',
   Rejected: 'app-badge app-badge--danger',
   Cancelled: 'app-badge',
@@ -49,7 +49,7 @@ export default function DataGridSection() {
     <Section
       id="grid"
       title="DataGrid"
-      description="Compact density, subtle selection, filtering, paging, and semantic statuses."
+      description="Horizontal hierarchy, tabular lining figures, right-aligned numbers, and restrained row fills."
     >
       <div className="app-table-shell">
         <DataGrid
@@ -71,12 +71,13 @@ export default function DataGridSection() {
             allowedPageSizes={[5, 10, 20]}
           />
 
-          <Column dataField="reference" caption="Reference" />
+          <Column dataField="reference" caption="Reference" minWidth={130} />
           <Column dataField="beneficiary" caption="Beneficiary" minWidth={210} />
           <Column
             dataField="amount"
             caption="Amount"
             dataType="number"
+            minWidth={120}
             alignment="right"
             format={{ type: 'fixedPoint', precision: 2 }}
           />
@@ -85,11 +86,13 @@ export default function DataGridSection() {
             dataField="valueDate"
             caption="Value date"
             dataType="date"
+            minWidth={120}
             format="dd MMM yyyy"
           />
           <Column
             dataField="status"
             caption="Status"
+            minWidth={110}
             cellRender={({ value }) => <StatusCell value={value as PaymentStatus} />}
             allowFiltering={false}
           />

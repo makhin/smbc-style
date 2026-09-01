@@ -29,7 +29,7 @@ export default function CardsSection() {
             <div className="app-card__title">Payment summary</div>
             <div className="app-caption">PAY-2026-008421</div>
           </div>
-          <span className="app-badge app-badge--warning">Under Review</span>
+          <span className="app-badge app-badge--warning">Under review</span>
         </div>
         <div className="app-card__body">
           <dl className="app-details">

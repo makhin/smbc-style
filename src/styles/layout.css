@@ -45,8 +45,6 @@
   padding: 0 var(--space-4) var(--space-2);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: .04em;
   color: var(--color-navigation-text-muted);
 }
 
@@ -148,6 +146,7 @@
 
 .app-grid {
   display: grid;
+  align-items: start;
   gap: var(--space-4);
 }
 

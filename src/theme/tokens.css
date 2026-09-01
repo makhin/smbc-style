@@ -8,14 +8,36 @@
 
 :root {
   /* Palette primitives */
+  --color-brand-traditional: #004831;
+  --color-brand-traditional-tint-90: #005742;
+  --color-brand-traditional-tint-80: #006451;
+  --color-brand-traditional-tint-70: #137260;
+  --color-brand-traditional-tint-60: #398171;
+  --color-brand-traditional-tint-50: #589284;
+  --color-brand-traditional-tint-40: #75a499;
+  --color-brand-traditional-tint-30: #91b7ae;
+  --color-brand-traditional-tint-20: #b1ccc4;
+  --color-brand-traditional-tint-10: #d5e4e1;
+
   --color-brand-green-900: #003322;
   --color-brand-green-800: #003d2a;
-  --color-brand-green-700: #004831;
+  --color-brand-green-700: var(--color-brand-traditional);
   --color-brand-green-600: #13542b;
-  --color-brand-header: #004b35;
+  --color-brand-header: var(--color-brand-traditional);
   --color-brand-fresh-500: #c4d600;
   --color-brand-fresh-300: #e0eb7e;
   --color-brand-fresh-100: #f2f6da;
+
+  /* Approved supplementary brand colours */
+  --color-brand-pure-crimson: #c3272b;
+  --color-brand-daylily: #ff8936;
+  --color-brand-triandra-grass: #e2b13c;
+  --color-brand-thousand-herbs: #317589;
+  --color-brand-navy: #003171;
+  --color-brand-vine-grape: #6d2b50;
+  --color-brand-cherry-blossom: #fcc9ba;
+  --color-brand-smoked-bamboo: #593a27;
+  --color-brand-indigo-ink: #393432;
 
   --color-neutral-white: #ffffff;
   --color-neutral-025: #fbfcfb;
@@ -31,8 +53,8 @@
   --color-green-hover: #f1f5f2;
   --color-feedback-success: #007a52;
   --color-feedback-warning: #a95a00;
-  --color-feedback-danger: #b3261e;
-  --color-feedback-info: #1b5a96;
+  --color-feedback-danger: var(--color-brand-pure-crimson);
+  --color-feedback-info: var(--color-brand-thousand-herbs);
 
   /* Data visualisation primitives */
   --color-data-green-muted: #6f8f7f;
@@ -57,6 +79,7 @@
   --color-border-default: var(--color-neutral-200);
   --color-border-strong: var(--color-neutral-300);
   --color-border-control: var(--color-neutral-400);
+  --color-table-rule-emphasis: var(--color-brand-traditional-tint-70);
   --color-border-inverse-subtle: rgb(255 255 255 / 8%);
   --color-border-inverse: rgb(255 255 255 / 72%);
 
@@ -70,9 +93,9 @@
   --color-feedback-success-subtle: rgb(0 122 82 / 10%);
   --color-feedback-warning-subtle: rgb(169 90 0 / 10%);
   --color-feedback-warning-faint: rgb(169 90 0 / 7%);
-  --color-feedback-danger-subtle: rgb(179 38 30 / 10%);
-  --color-feedback-danger-faint: rgb(179 38 30 / 7%);
-  --color-feedback-info-subtle: rgb(27 90 150 / 10%);
+  --color-feedback-danger-subtle: rgb(195 39 43 / 10%);
+  --color-feedback-danger-faint: rgb(195 39 43 / 7%);
+  --color-feedback-info-subtle: rgb(49 117 137 / 10%);
 
   --color-navigation-background: var(--color-brand-green-700);
   --color-navigation-text: rgb(255 255 255 / 78%);

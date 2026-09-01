@@ -10,7 +10,7 @@ export default function StatusSection() {
       <div className="ds-control-row">
         <span className="app-badge">Cancelled</span>
         <span className="app-badge app-badge--info">Pending</span>
-        <span className="app-badge app-badge--warning">Under Review</span>
+        <span className="app-badge app-badge--warning">Under review</span>
         <span className="app-badge app-badge--success">Approved</span>
         <span className="app-badge app-badge--danger">Rejected</span>
         <span className="app-badge app-badge--danger">Failed</span>

@@ -72,7 +72,7 @@ export default function DesignSystemPage() {
         <header className="ds-hero">
           <div>
             <div className="ds-eyebrow">Design system reference</div>
-            <h1 className="app-display-title">SMBC Application UI</h1>
+            <h1 className="app-display-title">SMBC application UI</h1>
             <p>
               Visual regression surface for shared application tokens, patterns,
               accessibility states, and DevExtreme components.
@@ -86,7 +86,7 @@ export default function DesignSystemPage() {
         ))}
 
         <footer className="ds-footer">
-          <span>SMBC Application Design System</span>
+          <span>SMBC application design system</span>
           <span>Reference surface · DevExtreme 25.1</span>
         </footer>
       </main>

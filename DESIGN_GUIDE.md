@@ -233,9 +233,14 @@ website.
   grids, and operational headings.
 - Local Myriad Pro files provide weights 300, 400, and 700.
 - Capitolium 2 Bold is reserved for `.app-display-title` and
-  `.app-display-heading`.
+  `.app-display-heading`; this is the approved application display exception,
+  not a general-purpose second UI family.
 - Arial and Georgia remain fallbacks only.
 - Use `/smbc-logo.svg` and `/favicon.ico`; do not redraw or remotely embed them.
+- Align body text left and use sentence case for headings and labels. Do not
+  force uppercase navigation labels or eyebrow text.
+- Trajan is not an application font and is reserved for the company name or
+  logo in source-controlled brand artwork.
 
 Current type scale:
 
@@ -252,6 +257,9 @@ Current type scale:
 Use sentence case, short labels, and explicit action verbs such as “Approve
 payment” or “Clear filters”.
 
+Application copy uses lining proportional figures by default. Data tables use
+lining tabular figures so numeric columns retain stable digit widths.
+
 ## 6. Colour contract
 
 Palette primitives live at the top of `tokens.css`. Components use semantic
@@ -267,17 +275,27 @@ roles such as the following:
 | `--color-border-default` | `#D8DDD9` | Decorative separators |
 | `--color-border-control` | `#7F8C85` | Interactive boundaries |
 | `--color-action-primary` | `#004831` | Primary actions and links |
-| `--color-header-background` | `#004B35` | Global header |
+| `--color-header-background` | `#004831` | Global header |
 | `--color-action-accent` | `#C4D600` | Fresh Green accent |
 
-Feedback roles are independent of brand colour:
+The theme also exposes the documented Traditional Green tint scale and the nine
+approved supplementary colours as palette primitives. They are reference
+values, not permission to decorate application surfaces indiscriminately.
+
+The supplied brand photograph lists Fresh Green as `#C4D700`; the application
+retains its existing `#C4D600` value until the original digital brand source is
+available for confirmation. Do not alter the checked-in logo to reconcile this
+photographic discrepancy.
+
+Feedback roles remain semantic; approved corporate colours are used where their
+meaning and contrast fit the state:
 
 | State | Token | Value |
 |---|---|---:|
 | Success | `--color-feedback-success` | `#007A52` |
 | Warning | `--color-feedback-warning` | `#A95A00` |
-| Error | `--color-feedback-danger` | `#B3261E` |
-| Information | `--color-feedback-info` | `#1B5A96` |
+| Error | `--color-feedback-danger` | `#C3272B` (Pure Crimson) |
+| Information | `--color-feedback-info` | `#317589` (Chigusa) |
 
 Fresh Green is an accent, not a default button background or universal success
 colour. Use dark text—not white—when Fresh Green is a large filled surface.
@@ -392,6 +410,12 @@ Data grids:
 
 - use the compact theme; never scale with `zoom` or `transform`;
 - use semantic surface tokens for headers, alternate rows, hover, and selection;
+- make horizontal rules more prominent than vertical rules and avoid a heavy
+  box around every cell;
+- use the 70% Traditional Green tint for the emphasized header rule while
+  keeping header and row fills light enough for interactive states;
+- use lining tabular figures in grid cells and proportional figures in body
+  copy;
 - right-align numeric values and format dates/currencies consistently;
 - expose only frequent row actions and move the rest into an overflow menu;
 - distinguish loading, empty data, and no filter results.

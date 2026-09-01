@@ -5,7 +5,7 @@ import TextBox from 'devextreme-react/text-box';
 
 import Section from '../components/Section';
 
-const statuses = ['Pending', 'Under Review', 'Approved', 'Rejected', 'Failed'];
+const statuses = ['Pending', 'Under review', 'Approved', 'Rejected', 'Failed'];
 
 export default function FiltersSection() {
   return (

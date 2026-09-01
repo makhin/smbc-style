@@ -5,17 +5,20 @@ export default function TypographySection() {
     <Section
       id="typography"
       title="Typography"
-      description="Application hierarchy is deliberately denser than the public EMEA website."
+      description="Left-aligned sentence case with a consistent Myriad Pro application hierarchy."
     >
       <div className="app-card">
         <div className="app-card__body ds-type-stack">
           <div>
             <span className="ds-type-meta">Brand display · Capitolium 30 / 700</span>
             <div className="app-display-title">A trusted partner</div>
+            <p className="app-caption">
+              Capitolium is reserved for occasional brand display headings.
+            </p>
           </div>
           <div>
             <span className="ds-type-meta">Application page title · Myriad Pro 24 / 600</span>
-            <div className="app-page-title">Payment Review</div>
+            <div className="app-page-title">Payment review</div>
           </div>
           <div>
             <span className="ds-type-meta">Application section · Myriad Pro 20 / 600</span>
@@ -38,6 +41,13 @@ export default function TypographySection() {
           <div>
             <span className="ds-type-meta">Caption · 12 / 400</span>
             <p className="app-caption">Last updated 27 Aug 2026, 14:32 CET</p>
+          </div>
+          <div className="app-callout">
+            <strong>Use sentence case</strong>
+            <p>
+              Capitalise only the first word and proper names. Keep body copy
+              left aligned and use one family in varying sizes and weights.
+            </p>
           </div>
         </div>
       </div>
