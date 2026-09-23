@@ -3,7 +3,7 @@
 Implemented 23 September 2026. Source project: `../smbc-ui`, separate from both
 `smbc-style` and `devextreme-theme`. No theme-package files were changed.
 The npm package has not been published to a registry. Source is maintained in
-the separate private `makhin/smbc-ui` GitHub repository.
+the separate public `makhin/smbc-ui` GitHub repository.
 
 ## Package and API
 
