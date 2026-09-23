@@ -1,7 +1,5 @@
+import { Button, Callout, Card, EmptyState, LoadingIndicator } from '@smbc/ui';
 import { useEffect, useRef, useState } from 'react';
-
-import Button from 'devextreme-react/button';
-import LoadIndicator from 'devextreme-react/load-indicator';
 
 import Section from '../components/Section';
 
@@ -25,11 +23,11 @@ export default function StatesSection() {
   return (
     <Section id="states" title="Loading, empty & error states">
       <div className="ds-state-grid">
-        <div className="app-card">
-          <div className="app-card__header">
-            <div className="app-card__title">Loading</div>
-          </div>
-          <div className="app-card__body ds-loading-demo" aria-busy={loadingDemo}>
+        <Card>
+          <Card.Header>
+            <Card.Title>Loading</Card.Title>
+          </Card.Header>
+          <Card.Body className="ds-loading-demo" aria-busy={loadingDemo}>
             {loadingDemo ? (
               <div
                 className="app-page-loading"
@@ -37,35 +35,33 @@ export default function StatesSection() {
                 aria-live="polite"
                 aria-atomic="true"
               >
-                <LoadIndicator height={24} width={24} elementAttr={{ 'aria-hidden': 'true' }} />
+                <LoadingIndicator />
                 <span>Refreshing payments…</span>
               </div>
             ) : (
-              <Button text="Run loading state" onClick={runLoadingDemo} />
+              <Button onClick={runLoadingDemo}>Run loading state</Button>
             )}
-          </div>
-        </div>
+          </Card.Body>
+        </Card>
 
-        <div className="app-empty-state">
-          <div className="ds-empty-icon" aria-hidden="true">
-            <i className="dx-icon dx-icon-search" />
-          </div>
-          <h3>No payments match these filters</h3>
-          <p>Try changing the date range or clearing one or more filters.</p>
-          <Button text="Clear filters" stylingMode="outlined" type="default" />
-        </div>
+        <EmptyState
+          icon="search"
+          title="No payments match these filters"
+          description="Try changing the date range or clearing one or more filters."
+          action={<Button variant="secondary">Clear filters</Button>}
+        />
 
-        <div className="app-card">
-          <div className="app-card__header">
-            <div className="app-card__title">Error</div>
-          </div>
-          <div className="app-card__body">
-            <div className="app-callout app-callout--danger app-page-error" role="alert">
+        <Card>
+          <Card.Header>
+            <Card.Title>Error</Card.Title>
+          </Card.Header>
+          <Card.Body>
+            <Callout className="app-page-error" tone="danger" role="alert">
               <strong>Unable to load payment history</strong>
               <span>Try again. If the problem continues, contact support.</span>
-            </div>
-          </div>
-        </div>
+            </Callout>
+          </Card.Body>
+        </Card>
       </div>
     </Section>
   );

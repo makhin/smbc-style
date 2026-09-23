@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@smbc/devextreme-theme": "file:../devextreme-theme/smbc-devextreme-theme-0.1.0.tgz",
+    "@smbc/ui": "file:../smbc-ui/smbc-ui-0.1.0.tgz",
     "devextreme": "26.1.4",
     "devextreme-react": "26.1.4",
     "react": "^19.2.8",

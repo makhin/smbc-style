@@ -1,12 +1,18 @@
-import Button from 'devextreme-react/button';
-import DataGrid, {
-  Column,
-  FilterRow,
-  HeaderFilter,
-  Pager,
-  Paging,
-  Selection,
-} from 'devextreme-react/data-grid';
+import {
+  Button,
+  DataGrid,
+  StatusBadge,
+  TableShell,
+  type StatusBadgeTone,
+} from '@smbc/ui';
+import {
+  DataGridColumn as Column,
+  DataGridFilterRow as FilterRow,
+  DataGridHeaderFilter as HeaderFilter,
+  DataGridPager as Pager,
+  DataGridPaging as Paging,
+  DataGridSelection as Selection,
+} from '@smbc/ui/data-grid';
 
 import Section from '../components/Section';
 import paymentsData from '../data/payments.json';
@@ -29,19 +35,19 @@ type PaymentRow = {
   status: PaymentStatus;
 };
 
-const statusClass: Record<PaymentStatus, string> = {
-  Pending: 'app-badge app-badge--info',
-  'Under review': 'app-badge app-badge--warning',
-  Approved: 'app-badge app-badge--success',
-  Rejected: 'app-badge app-badge--danger',
-  Cancelled: 'app-badge',
-  Failed: 'app-badge app-badge--danger',
+const statusTone: Record<PaymentStatus, StatusBadgeTone> = {
+  Pending: 'info',
+  'Under review': 'warning',
+  Approved: 'success',
+  Rejected: 'danger',
+  Cancelled: 'neutral',
+  Failed: 'danger',
 };
 
 const payments = paymentsData as PaymentRow[];
 
 function StatusCell({ value }: { value: PaymentStatus }) {
-  return <span className={statusClass[value]}>{value}</span>;
+  return <StatusBadge tone={statusTone[value]}>{value}</StatusBadge>;
 }
 
 export default function DataGridSection() {
@@ -51,15 +57,8 @@ export default function DataGridSection() {
       title="DataGrid"
       description="Horizontal hierarchy, tabular lining figures, right-aligned numbers, and restrained row fills."
     >
-      <div className="app-table-shell">
-        <DataGrid
-          dataSource={payments}
-          keyExpr="id"
-          showBorders={false}
-          rowAlternationEnabled
-          hoverStateEnabled
-          columnAutoWidth
-        >
+      <TableShell>
+        <DataGrid dataSource={payments} keyExpr="id">
           <Selection mode="multiple" showCheckBoxesMode="always" />
           <FilterRow visible />
           <HeaderFilter visible />
@@ -72,7 +71,11 @@ export default function DataGridSection() {
           />
 
           <Column dataField="reference" caption="Reference" minWidth={130} />
-          <Column dataField="beneficiary" caption="Beneficiary" minWidth={210} />
+          <Column
+            dataField="beneficiary"
+            caption="Beneficiary"
+            minWidth={210}
+          />
           <Column
             dataField="amount"
             caption="Amount"
@@ -93,7 +96,9 @@ export default function DataGridSection() {
             dataField="status"
             caption="Status"
             minWidth={110}
-            cellRender={({ value }) => <StatusCell value={value as PaymentStatus} />}
+            cellRender={({ value }) => (
+              <StatusCell value={value as PaymentStatus} />
+            )}
             allowFiltering={false}
           />
           <Column
@@ -104,16 +109,15 @@ export default function DataGridSection() {
             cellRender={() => (
               <Button
                 icon="more"
-                stylingMode="text"
-                hint="Payment actions"
-                elementAttr={{ 'aria-label': 'Payment actions' }}
+                ariaLabel="Payment actions"
+                variant="tertiary"
               />
             )}
           />
         </DataGrid>
-      </div>
+      </TableShell>
 
-      <div className="app-table-shell">
+      <TableShell>
         <div
           className="app-table-scroll"
           role="region"
@@ -134,13 +138,15 @@ export default function DataGridSection() {
                 <tr key={payment.id}>
                   <td>{payment.reference}</td>
                   <td>{payment.beneficiary}</td>
-                  <td><StatusCell value={payment.status} /></td>
+                  <td>
+                    <StatusCell value={payment.status} />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </TableShell>
     </Section>
   );
 }

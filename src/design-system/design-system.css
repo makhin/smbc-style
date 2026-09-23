@@ -238,7 +238,7 @@ html:has(.ds-page) {
   gap: var(--space-4);
 }
 
-.ds-component-grid > .app-card {
+.ds-component-card {
   min-width: 0;
 }
 
@@ -246,9 +246,6 @@ html:has(.ds-page) {
   grid-column: 1 / -1;
 }
 
-.ds-component-grid .app-field {
-  gap: var(--space-2);
-}
 
 .ds-component-grid .dx-accordion-item-body {
   color: var(--color-text-secondary);
@@ -292,7 +289,7 @@ html:has(.ds-page) {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.ds-message-grid .app-callout {
+.ds-message-grid .ds-message {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -306,22 +303,6 @@ html:has(.ds-page) {
   padding-top: var(--space-1);
 }
 
-.ds-dialog-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-4) 0;
-}
-
-.ds-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: var(--border-width-default) solid var(--color-border-default);
-}
-
 .ds-state-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -332,21 +313,6 @@ html:has(.ds-page) {
   justify-content: center;
   gap: var(--space-3);
   min-height: 180px;
-}
-
-.ds-empty-icon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  margin-bottom: var(--space-2);
-  border-radius: var(--radius-circle);
-  background: var(--color-surface-selected);
-  color: var(--color-action-primary);
-}
-
-.ds-empty-icon .dx-icon {
-  font-size: var(--font-size-xl);
 }
 
 .ds-accessibility-grid {

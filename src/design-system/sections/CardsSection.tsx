@@ -1,4 +1,4 @@
-import Button from 'devextreme-react/button';
+import { Button, Card, KpiCard, StatusBadge } from '@smbc/ui';
 
 import Section from '../components/Section';
 
@@ -6,32 +6,24 @@ export default function CardsSection() {
   return (
     <Section id="cards" title="Cards & page patterns">
       <div className="app-grid app-grid--3">
-        <article className="app-kpi">
-          <div className="app-kpi__label">Payments today</div>
-          <div className="app-kpi__value">184</div>
-          <div className="app-kpi__meta">12 awaiting review</div>
-        </article>
-        <article className="app-kpi">
-          <div className="app-kpi__label">Total value</div>
-          <div className="app-kpi__value">€8.4m</div>
-          <div className="app-kpi__meta">Across 7 currencies</div>
-        </article>
-        <article className="app-kpi">
-          <div className="app-kpi__label">Exceptions</div>
-          <div className="app-kpi__value">6</div>
-          <div className="app-kpi__meta">2 require immediate attention</div>
-        </article>
+        <KpiCard label="Payments today" value="184" meta="12 awaiting review" />
+        <KpiCard label="Total value" value="€8.4m" meta="Across 7 currencies" />
+        <KpiCard
+          label="Exceptions"
+          value="6"
+          meta="2 require immediate attention"
+        />
       </div>
 
-      <div className="app-card">
-        <div className="app-card__header">
+      <Card>
+        <Card.Header>
           <div>
-            <div className="app-card__title">Payment summary</div>
+            <Card.Title>Payment summary</Card.Title>
             <div className="app-caption">PAY-2026-008421</div>
           </div>
-          <span className="app-badge app-badge--warning">Under review</span>
-        </div>
-        <div className="app-card__body">
+          <StatusBadge tone="warning">Under review</StatusBadge>
+        </Card.Header>
+        <Card.Body>
           <dl className="app-details">
             <dt>Beneficiary</dt>
             <dd>Aster Components GmbH</dd>
@@ -42,12 +34,12 @@ export default function CardsSection() {
             <dt>Created by</dt>
             <dd>Operations Team</dd>
           </dl>
-        </div>
-        <div className="app-card__footer">
-          <Button text="Back" stylingMode="text" />
-          <Button text="Approve" type="default" />
-        </div>
-      </div>
+        </Card.Body>
+        <Card.Footer>
+          <Button variant="tertiary">Back</Button>
+          <Button variant="primary">Approve</Button>
+        </Card.Footer>
+      </Card>
     </Section>
   );
 }

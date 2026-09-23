@@ -1,3 +1,4 @@
+import { StatusBadge } from '@smbc/ui';
 import AccessibilitySection from './sections/AccessibilitySection';
 import ButtonsSection from './sections/ButtonsSection';
 import CardsSection from './sections/CardsSection';
@@ -78,7 +79,7 @@ export default function DesignSystemPage() {
               accessibility states, and DevExtreme components.
             </p>
           </div>
-          <span className="app-badge app-badge--brand">v1.2</span>
+          <StatusBadge tone="brand">v1.2</StatusBadge>
         </header>
 
         {sections.map(({ id, Component }) => (

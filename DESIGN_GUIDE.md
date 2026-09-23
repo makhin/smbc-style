@@ -1,6 +1,6 @@
 # SMBC Application UI Guide
 
-**Version:** 0.2
+**Version:** 0.3
 **Scope:** this React + TypeScript repository  
 **UI foundation:** DevExtreme 26.1.4, Fluent Blue Light Compact
 **Visual reference:** SMBC EMEA
@@ -23,7 +23,7 @@ Use this order when implementation details conflict:
 
 1. Approved internal SMBC standards.
 2. `../devextreme-theme/src/tokens.css` for reusable visual values.
-3. Shared application patterns in `src/styles` and DevExtreme overrides in
+3. Reusable components in `../smbc-ui`, application layouts in `src/styles`, and DevExtreme overrides in
    `../devextreme-theme/src/overrides.css`.
 4. `/design-system` for rendered states and regression review.
 5. Page-specific styles only for local layout constraints.
@@ -125,8 +125,9 @@ are divided by purpose:
 - `smbc-shell.css` owns optional SMBC sidebar/card helpers;
 - `typography.css` owns the document baseline and reusable text helpers;
 - `layout.css` owns reusable shell, page-header, grid, row, and stack patterns;
-- `components.css` owns reusable application components such as cards, badges,
-  filters, callouts, KPI blocks, empty states, and table shells;
+- `components.css` owns native reference-table scrolling, page feedback layouts
+  and divider rules; reusable cards, fields, badges, filters, callouts, KPI
+  blocks, empty states and table shells belong to `@smbc/ui`;
 - `pages.css` owns compositions shared by a class of pages, such as review/detail
   splits and sticky workflow action bars.
 
@@ -216,7 +217,7 @@ header. `index.html` must retain:
 
 `src/main.tsx` loads styles in this order:
 
-1. Shared application styles, preserving their original position before vendor CSS.
+1. `@smbc/ui/styles.css`, then application styles, preserving the original position before vendor CSS.
 2. `@smbc/devextreme-theme/styles.css`: fonts, tokens, generated DevExtreme theme,
    then shared overrides.
 3. Application-owned optional SMBC shell helpers.
@@ -401,9 +402,9 @@ Use the shared `.app-*` patterns before creating new local equivalents:
 - state: badges, callouts, loading, empty states, action bars;
 - typography: labels, captions, muted text, display headings.
 
-Use DevExtreme Button, editors, DataGrid, Tabs, Popup, Toast, and
-LoadIndicator when their behaviour fits the requirement. Do not wrap every
-widget merely for symmetry.
+Use `@smbc/ui` Button, editors, DataGrid, Tabs, Dialog, Toast and
+LoadingIndicator. Advanced grid and validation configuration use explicit UI
+subpaths. ChartsSection is the sole approved direct DevExtreme React import.
 
 Forms:
 
@@ -554,11 +555,26 @@ and consumes its exports, including logo and favicon; there are
 no duplicate application-owned brand files. Package JS imports are side-effect
 free. Palette registration happens explicitly after loading the CSS.
 
-Typography helpers, shell layouts, cards, pages, navigation and reference demos
-remain application responsibilities. The theme package includes no React code.
+Global typography helpers, shell layouts, pages, navigation and reference demos
+remain application responsibilities. Reusable components live in `../smbc-ui`. The theme package includes no React code.
 In `../devextreme-theme`, `npm run pack:check` verifies the runtime tarball
 contract and `npm test` verifies an installed tarball with Node and Vite.
 Run `npm pack` there and reinstall the generated archive in this application
 after changing the theme. See the application README for the update workflow.
 Application `dev`, `typecheck` and `build` use the installed archive; they do not
 compile the theme or depend on a source workspace.
+
+## 16. Component library ownership
+
+`../smbc-ui` is the separate `@smbc/ui@0.1.0` source project. The application
+installs its packed archive rather than using source aliases. Use its semantic
+props, React callbacks and compositional primitives. Do not recreate their
+private `smbc-ui-*` classes in the application. Reference-only layout classes
+may be passed via className. `Field` supplies label/help/error relationships;
+advanced DevExtreme rules remain available under `@smbc/ui/validation`.
+
+New reusable components belong in that package and must be exercised here in
+the same release cycle. Shell, routing and business workflows remain outside it.
+See [the package README](../smbc-ui/README.md) and
+[the migration report](docs/smbc-ui-migration.md). This ownership supersedes
+older examples above that suggest promoting reusable component CSS to src/styles.

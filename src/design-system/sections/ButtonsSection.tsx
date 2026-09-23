@@ -1,4 +1,4 @@
-import Button from 'devextreme-react/button';
+import { Button } from '@smbc/ui';
 
 import Section from '../components/Section';
 
@@ -10,16 +10,16 @@ export default function ButtonsSection() {
       description="Primary, secondary, destructive, disabled, and icon-only actions."
     >
       <div className="ds-control-row">
-        <Button text="Approve payment" type="default" stylingMode="contained" />
-        <Button text="Export" type="default" stylingMode="outlined" icon="exportxlsx" />
-        <Button text="Cancel" stylingMode="text" />
-        <Button text="Delete payment" type="danger" stylingMode="contained" icon="trash" />
-        <Button
-          icon="refresh"
-          hint="Refresh"
-          elementAttr={{ 'aria-label': 'Refresh' }}
-        />
-        <Button text="Disabled" disabled />
+        <Button variant="primary">Approve payment</Button>
+        <Button icon="exportxlsx" variant="secondary">
+          Export
+        </Button>
+        <Button variant="tertiary">Cancel</Button>
+        <Button icon="trash" variant="danger">
+          Delete payment
+        </Button>
+        <Button icon="refresh" ariaLabel="Refresh" />
+        <Button disabled>Disabled</Button>
       </div>
     </Section>
   );

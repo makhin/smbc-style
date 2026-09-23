@@ -1,15 +1,20 @@
-import Accordion from 'devextreme-react/accordion';
-import Button from 'devextreme-react/button';
-import NumberBox from 'devextreme-react/number-box';
-import TagBox from 'devextreme-react/tag-box';
-import TextBox from 'devextreme-react/text-box';
-import ValidationGroup from 'devextreme-react/validation-group';
-import ValidationSummary from 'devextreme-react/validation-summary';
-import Validator, {
+import {
+  Accordion,
+  Button,
+  Card,
+  Field,
+  MultiSelect,
+  NumberInput,
+  TextInput,
+} from '@smbc/ui';
+import {
   EmailRule,
   RangeRule,
   RequiredRule,
-} from 'devextreme-react/validator';
+  ValidationGroup,
+  ValidationSummary,
+  Validator,
+} from '@smbc/ui/validation';
 
 import Section from '../components/Section';
 import formOptions from '../data/form-options.json';
@@ -37,112 +42,100 @@ export default function ComponentsSection() {
       description="A small set of common application patterns beyond the basic form controls."
     >
       <div className="ds-component-grid">
-        <div className="app-card">
-          <div className="app-card__header">
+        <Card className="ds-component-card">
+          <Card.Header>
             <div>
-              <div className="app-card__title">NumberBox</div>
+              <Card.Title>NumberBox</Card.Title>
               <div className="app-caption">Formatted numeric input</div>
             </div>
-          </div>
-          <div className="app-card__body">
-            <div className="app-field">
-              <label className="app-label" htmlFor="ds-payment-amount">
-                Payment amount
-              </label>
-              <NumberBox
-                inputAttr={{ id: 'ds-payment-amount' }}
+          </Card.Header>
+          <Card.Body>
+            <Field
+              id="ds-payment-amount"
+              label="Payment amount"
+              help="EUR · minimum 0.00"
+            >
+              <NumberInput
                 defaultValue={184250.45}
                 format="#,##0.00"
                 min={0}
                 showSpinButtons
               />
-              <span className="app-caption">EUR · minimum 0.00</span>
-            </div>
-          </div>
-        </div>
+            </Field>
+          </Card.Body>
+        </Card>
 
-        <div className="app-card">
-          <div className="app-card__header">
+        <Card className="ds-component-card">
+          <Card.Header>
             <div>
-              <div className="app-card__title">TagBox</div>
+              <Card.Title>TagBox</Card.Title>
               <div className="app-caption">Searchable multiple selection</div>
             </div>
-          </div>
-          <div className="app-card__body">
-            <div className="app-field">
-              <label className="app-label" htmlFor="ds-review-teams">
-                Review teams
-              </label>
-              <TagBox
-                inputAttr={{ id: 'ds-review-teams' }}
-                items={formOptions.reviewTeams}
+          </Card.Header>
+          <Card.Body>
+            <Field
+              id="ds-review-teams"
+              label="Review teams"
+              help="Search, select several values, then apply."
+            >
+              <MultiSelect
+                options={formOptions.reviewTeams}
                 defaultValue={['Payments Operations', 'Financial Crime']}
                 placeholder="Select teams"
-                searchEnabled
-                showSelectionControls
-                applyValueMode="useButtons"
+                searchable
+                selectionControls
+                applyMode="buttons"
               />
-              <span className="app-caption">
-                Search, select several values, then apply.
-              </span>
-            </div>
-          </div>
-        </div>
+            </Field>
+          </Card.Body>
+        </Card>
 
-        <div className="app-card ds-component-grid__wide">
-          <div className="app-card__header">
+        <Card className="ds-component-card ds-component-grid__wide">
+          <Card.Header>
             <div>
-              <div className="app-card__title">Accordion</div>
-              <div className="app-caption">Progressive disclosure for related content</div>
+              <Card.Title>Accordion</Card.Title>
+              <div className="app-caption">
+                Progressive disclosure for related content
+              </div>
             </div>
-          </div>
-          <div className="app-card__body">
+          </Card.Header>
+          <Card.Body>
             <Accordion
               items={accordionItems}
               defaultSelectedIndex={0}
               collapsible
               multiple={false}
             />
-          </div>
-        </div>
+          </Card.Body>
+        </Card>
 
-        <div className="app-card ds-component-grid__wide">
-          <div className="app-card__header">
+        <Card className="ds-component-card ds-component-grid__wide">
+          <Card.Header>
             <div>
-              <div className="app-card__title">Validation</div>
+              <Card.Title>Validation</Card.Title>
               <div className="app-caption">
                 Field-level rules with a form-level summary
               </div>
             </div>
-          </div>
-          <div className="app-card__body">
+          </Card.Header>
+          <Card.Body>
             <form
               className="ds-validation-form"
               onSubmit={(event) => event.preventDefault()}
             >
               <ValidationGroup>
                 <div className="ds-validation-fields">
-                  <div className="app-field">
-                    <label className="app-label" htmlFor="ds-approver-email">
-                      Approver email *
-                    </label>
-                    <TextBox
-                      inputAttr={{ id: 'ds-approver-email' }}
-                      placeholder="name@smbcgroup.com"
-                    >
+                  <Field id="ds-approver-email" label="Approver email" required>
+                    <TextInput placeholder="name@smbcgroup.com">
                       <Validator>
                         <RequiredRule message="Enter the approver email." />
                         <EmailRule message="Enter a valid email address." />
                       </Validator>
-                    </TextBox>
-                  </div>
+                    </TextInput>
+                  </Field>
 
-                  <div className="app-field">
-                    <label className="app-label" htmlFor="ds-approval-limit">
-                      Approval limit *
-                    </label>
-                    <NumberBox
-                      inputAttr={{ id: 'ds-approval-limit' }}
+                  <Field id="ds-approval-limit" label="Approval limit" required>
+                    <NumberInput
                       defaultValue={0}
                       format="#,##0.00"
                       showSpinButtons
@@ -155,18 +148,20 @@ export default function ComponentsSection() {
                           message="Use a value from 100.00 to 1,000,000.00."
                         />
                       </Validator>
-                    </NumberBox>
-                  </div>
+                    </NumberInput>
+                  </Field>
                 </div>
 
                 <div className="ds-validation-actions">
                   <ValidationSummary />
-                  <Button text="Validate fields" type="default" useSubmitBehavior />
+                  <Button submit variant="primary">
+                    Validate fields
+                  </Button>
                 </div>
               </ValidationGroup>
             </form>
-          </div>
-        </div>
+          </Card.Body>
+        </Card>
       </div>
     </Section>
   );

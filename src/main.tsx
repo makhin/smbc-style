@@ -1,3 +1,4 @@
+import '@smbc/ui/styles.css';
 import './styles/index.css';
 import '@smbc/devextreme-theme/styles.css';
 import './styles/smbc-shell.css';

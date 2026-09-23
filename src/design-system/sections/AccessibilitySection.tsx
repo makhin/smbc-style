@@ -1,7 +1,5 @@
+import { Button, Card, Tabs } from '@smbc/ui';
 import { useState } from 'react';
-
-import Button from 'devextreme-react/button';
-import Tabs from 'devextreme-react/tabs';
 
 import Section from '../components/Section';
 
@@ -21,44 +19,41 @@ export default function AccessibilitySection() {
       description="Focus, target size, keyboard navigation, and contrast must be visible here."
     >
       <div className="ds-accessibility-grid">
-        <div className="app-card">
-          <div className="app-card__body">
+        <Card>
+          <Card.Body>
             <h3>Keyboard focus</h3>
             <p className="app-muted">
-              Tab through these controls. Focus must remain obvious on both light and
-              dark surfaces.
+              Tab through these controls. Focus must remain obvious on both
+              light and dark surfaces.
             </p>
 
             <div className="ds-focus-surface ds-focus-surface--light">
-              <Button text="Light surface" />
+              <Button>Light surface</Button>
               <a href="#accessibility">Text link</a>
             </div>
 
             <div className="ds-focus-surface ds-focus-surface--dark">
-              <Button text="Dark surface" stylingMode="outlined" />
+              <Button devExtremeProps={{ type: 'normal' }} variant="secondary">
+                Dark surface
+              </Button>
               <a href="#accessibility">Text link</a>
             </div>
-          </div>
-        </div>
+          </Card.Body>
+        </Card>
 
-        <div className="app-card">
-          <div className="app-card__body">
+        <Card>
+          <Card.Body>
             <h3>Tabs</h3>
             <Tabs
               items={tabs}
               selectedIndex={selectedTab}
-              onSelectionChanged={(event) => {
-                const item = event.addedItems[0] as { id?: number } | undefined;
-                if (typeof item?.id === 'number') {
-                  setSelectedTab(item.id);
-                }
-              }}
+              onChange={setSelectedTab}
             />
             <div className="ds-tab-content">
               Selected: <strong>{tabs[selectedTab].text}</strong>
             </div>
-          </div>
-        </div>
+          </Card.Body>
+        </Card>
       </div>
     </Section>
   );

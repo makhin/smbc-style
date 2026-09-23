@@ -1,7 +1,7 @@
 # SMBC Application UI
 
 React application shell and design-system reference built with DevExtreme and
-`@smbc/devextreme-theme`. The implementation standard and UI rules live in
+`@smbc/devextreme-theme` and `@smbc/ui`. The implementation standard and UI rules live in
 [`DESIGN_GUIDE.md`](DESIGN_GUIDE.md).
 
 ## Installation and commands
@@ -11,6 +11,10 @@ The theme is installed from the local archive
 and `package-lock.json`. Ensure this archive exists next to the application
 before installing dependencies. npm extracts it into `node_modules`; there is
 no workspace or symlink to the theme's source project.
+
+The UI package is installed from
+`../smbc-ui/smbc-ui-0.1.0.tgz`; this sibling archive must also exist for `npm ci`.
+Its source and API documentation live in [smbc-ui](../smbc-ui/README.md).
 
 ```bash
 npm ci
@@ -61,7 +65,7 @@ application.
 
 `src/main.tsx` loads:
 
-1. Shared application patterns, preserving their position before vendor rules.
+1. `@smbc/ui/styles.css`, then shared application patterns, preserving their position before vendor rules.
 2. `@smbc/devextreme-theme/styles.css`: fonts, tokens, generated theme, overrides.
 3. Application-owned SMBC shell helpers.
 4. Explicit `registerSmbcVizPalette()` and package favicon initialization.
@@ -93,3 +97,30 @@ for favicon setup, direct asset exports and internal-use licensing.
 
 One-off content dimensions and responsive breakpoints remain local to their
 components because they are layout constraints, not shared design decisions.
+
+## Updating the component library
+
+```sh
+cd ../smbc-ui
+npm ci
+npm run typecheck
+npm run pack:check
+npm test
+npm pack
+cd ../smbc-style
+npm install ../smbc-ui/smbc-ui-0.1.0.tgz
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Use `@smbc/ui` for ordinary controls and primitives, with explicit `data-grid`
+and `validation` subpaths for advanced vendor configuration. Direct
+`devextreme-react/*` imports are restricted by ESLint. The only exception is
+`ChartsSection.tsx` (`Chart`, `Legend`, `Series`); chart palette ownership remains
+with the theme. Its direct `devextreme/common/charts` import is type-only.
+
+Reusable card, field, badge, filter, toolbar, callout, KPI, empty-state and table
+shell CSS now belongs to the UI package. Application components.css retains
+native reference-table scrolling, page loading/error layout and divider rules.
+See [the migration report](docs/smbc-ui-migration.md) for verification and scope.

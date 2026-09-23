@@ -1,3 +1,4 @@
+import { Card } from '@smbc/ui';
 import Chart, { Legend, Series } from 'devextreme-react/chart';
 
 import { SMBC_VIZ_PALETTE_NAME } from '@smbc/devextreme-theme/viz';
@@ -12,11 +13,11 @@ export default function ChartsSection() {
       title="Charts"
       description="SVG-based components use the separately registered SMBC palette."
     >
-      <div className="app-card">
-        <div className="app-card__header">
-          <div className="app-card__title">Daily payment volume</div>
-        </div>
-        <div className="app-card__body">
+      <Card>
+        <Card.Header>
+          <Card.Title>Daily payment volume</Card.Title>
+        </Card.Header>
+        <Card.Body>
           <Chart
             dataSource={paymentVolume}
             palette={SMBC_VIZ_PALETTE_NAME as Palette}
@@ -37,8 +38,8 @@ export default function ChartsSection() {
             />
             <Legend verticalAlignment="top" horizontalAlignment="right" />
           </Chart>
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     </Section>
   );
 }

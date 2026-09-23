@@ -1,9 +1,9 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
   globalIgnores(['**/dist/**']),
@@ -19,4 +19,22 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
-])
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/design-system/sections/ChartsSection.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['devextreme-react', 'devextreme-react/*'],
+              message:
+                'Use @smbc/ui or its data-grid/validation subpaths. ChartsSection is the documented chart exception.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+]);

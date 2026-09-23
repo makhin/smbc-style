@@ -1,3 +1,4 @@
+import { StatusBadge } from '@smbc/ui';
 import Section from '../components/Section';
 
 type Swatch = readonly [name: string, token: string, value: string];
@@ -72,8 +73,8 @@ export default function FoundationsSection() {
       <div className="ds-subsection">
         <h3>Primary corporate colours</h3>
         <p className="app-muted">
-          Traditional Green is dominant. Fresh Green is a restrained accent;
-          the project keeps #C4D600 pending confirmation against the source PDF.
+          Traditional Green is dominant. Fresh Green is a restrained accent; the
+          project keeps #C4D600 pending confirmation against the source PDF.
         </p>
         <SwatchGrid swatches={primarySwatches} />
       </div>
@@ -114,7 +115,7 @@ export default function FoundationsSection() {
         <div className="ds-control-row">
           <div className="ds-shape ds-shape--control">3px control</div>
           <div className="ds-shape ds-shape--card">6px card</div>
-          <span className="app-badge app-badge--brand">Pill status</span>
+          <StatusBadge tone="brand">Pill status</StatusBadge>
         </div>
       </div>
     </Section>
