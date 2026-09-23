@@ -292,8 +292,7 @@ html:has(.ds-page) {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.ds-message-grid .app-callout,
-.ds-state-grid .app-callout {
+.ds-message-grid .app-callout {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -333,12 +332,6 @@ html:has(.ds-page) {
   justify-content: center;
   gap: var(--space-3);
   min-height: 180px;
-}
-
-.ds-loading-status {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
 }
 
 .ds-empty-icon {

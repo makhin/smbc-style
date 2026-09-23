@@ -32,12 +32,12 @@ export default function StatesSection() {
           <div className="app-card__body ds-loading-demo" aria-busy={loadingDemo}>
             {loadingDemo ? (
               <div
-                className="ds-loading-status"
+                className="app-page-loading"
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
               >
-                <LoadIndicator elementAttr={{ 'aria-hidden': 'true' }} />
+                <LoadIndicator height={24} width={24} elementAttr={{ 'aria-hidden': 'true' }} />
                 <span>Refreshing payments…</span>
               </div>
             ) : (
@@ -60,7 +60,7 @@ export default function StatesSection() {
             <div className="app-card__title">Error</div>
           </div>
           <div className="app-card__body">
-            <div className="app-callout app-callout--danger">
+            <div className="app-callout app-callout--danger app-page-error" role="alert">
               <strong>Unable to load payment history</strong>
               <span>Try again. If the problem continues, contact support.</span>
             </div>

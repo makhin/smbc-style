@@ -112,6 +112,35 @@ export default function DataGridSection() {
           />
         </DataGrid>
       </div>
+
+      <div className="app-table-shell">
+        <div
+          className="app-table-scroll"
+          role="region"
+          aria-label="Payment summary: scroll horizontally on narrow screens"
+          tabIndex={0}
+        >
+          <table>
+            <caption>Payment summary — native table</caption>
+            <thead>
+              <tr>
+                <th scope="col">Reference</th>
+                <th scope="col">Beneficiary</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payments.slice(0, 3).map((payment) => (
+                <tr key={payment.id}>
+                  <td>{payment.reference}</td>
+                  <td>{payment.beneficiary}</td>
+                  <td><StatusCell value={payment.status} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </Section>
   );
 }

@@ -27,7 +27,7 @@
   transform: translateY(calc(-100% - var(--space-3)));
 }
 
-.skip-link:focus {
+.skip-link:focus-visible {
   transform: translateY(0);
 }
 
@@ -175,11 +175,16 @@
 
 @media (max-width: 760px) {
   .global-header__inner {
-    padding-inline: var(--space-4);
+    padding: var(--space-4);
   }
 
   .global-header__brand span {
     display: none;
+  }
+
+  .global-header__brand img {
+    width: 112px;
+    height: auto;
   }
 
   .global-header__menu-button {

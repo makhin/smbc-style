@@ -12,8 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "devextreme": "25.1",
-    "devextreme-react": "25.1",
+    "devextreme": "26.1.4",
+    "devextreme-react": "26.1.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.2"
@@ -25,7 +25,7 @@
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
     "devextreme-cli": "^1.17.0",
-    "devextreme-themebuilder": "25.1",
+    "devextreme-themebuilder": "26.1.4",
     "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",

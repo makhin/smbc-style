@@ -2,7 +2,7 @@
 
 **Version:** 0.2
 **Scope:** this React + TypeScript repository  
-**UI foundation:** DevExtreme 25.1, Fluent Blue Light Compact  
+**UI foundation:** DevExtreme 26.1.4, Fluent Blue Light Compact
 **Visual reference:** SMBC EMEA
 
 ## 1. Purpose
@@ -341,7 +341,9 @@ Current header behaviour:
 
 The header publishes `--sticky-header-offset` on `#main-content`. Sticky page
 elements consume that custom property instead of coupling header CSS to a page
-class. Hash targets include the visible header height in `scroll-margin-top`.
+class. The document uses `scroll-padding-top` for the header offset when navigating to
+hash targets. Do not add the same offset as `scroll-margin-top` on targets;
+the two offsets accumulate.
 
 A dark sidebar is an optional operational pattern, not a corporate requirement.
 Use it only when the information architecture needs persistent module
@@ -504,3 +506,27 @@ npm run typecheck
 npm run theme:build
 npm run build
 ```
+
+## 14. Fixes backported from SwiftReview (September 2026)
+
+Shared presentation fixes were compared against SwiftReview commit `4899560`.
+The relevant source changes are `ea203fe` (sidebar selection), `b123d92`
+(table sizing), and `21ef888` (TagBox, native tables, feedback, touch and anchors).
+
+- DevExtreme, its React wrappers and ThemeBuilder use the same pinned version,
+  26.1.4. Rebuild the generated theme with `npm run theme:build`.
+- TagBox checkbox dropdowns are capped at 520px and constrained to the viewport.
+  Select-all spacing and selected-item colours use shared overrides.
+- Sidebar navigation selection styling excludes lists with selection checkboxes.
+- Table shells can shrink inside grid/flex layouts; empty DataGrid filler rows
+  collapse. Native tables use `.app-table-scroll` inside `.app-table-shell`,
+  with a labelled, keyboard-focusable scroll region as shown in the reference.
+- `.app-page-loading` and `.app-page-error` provide shared feedback layouts;
+  `.app-page--wide` allows full-width application pages.
+- Touch interaction, balanced headings and document-level anchor spacing are
+  shared. The tap highlight is exposed through `--color-action-tap-highlight`.
+- The mobile header uses the smaller logo and compact padding from SwiftReview.
+
+The reference retains its own navigation and scroll-aware header. SwiftReview's
+authentication, routing, review-stage colours, message actions and administrative
+page layouts belong to the consuming application and are not copied here.

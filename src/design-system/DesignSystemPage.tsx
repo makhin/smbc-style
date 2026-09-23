@@ -87,7 +87,7 @@ export default function DesignSystemPage() {
 
         <footer className="ds-footer">
           <span>SMBC application design system</span>
-          <span>Reference surface · DevExtreme 25.1</span>
+          <span>Reference surface · DevExtreme 26.1</span>
         </footer>
       </main>
     </div>

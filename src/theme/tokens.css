@@ -88,6 +88,7 @@
   --color-action-primary-active: var(--color-brand-green-900);
   --color-action-accent: var(--color-brand-fresh-500);
   --color-action-accent-muted: rgb(196 214 0 / 70%);
+  --color-action-tap-highlight: rgb(0 72 49 / 16%);
   --color-action-primary-muted: rgb(0 72 49 / 18%);
 
   --color-feedback-success-subtle: rgb(0 122 82 / 10%);
