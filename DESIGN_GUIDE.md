@@ -22,9 +22,9 @@ widget layer—not a default DevExtreme application recoloured green.
 Use this order when implementation details conflict:
 
 1. Approved internal SMBC standards.
-2. `src/theme/tokens.css` for reusable visual values.
+2. `../devextreme-theme/src/tokens.css` for reusable visual values.
 3. Shared application patterns in `src/styles` and DevExtreme overrides in
-   `src/theme/smbc-devextreme-overrides.css`.
+   `../devextreme-theme/src/overrides.css`.
 4. `/design-system` for rendered states and regression review.
 5. Page-specific styles only for local layout constraints.
 
@@ -49,7 +49,6 @@ src/
     RootLayout.tsx
     GlobalHeader.tsx
     global-header.css
-  assets/fonts/
   design-system/
     DesignSystemPage.tsx
     components/
@@ -59,33 +58,44 @@ src/
     sections/
     design-system.css
   styles/
-    fonts.css
+    smbc-shell.css
     typography.css
     layout.css
     components.css
     pages.css
     index.css
-  theme/
+../devextreme-theme/  # separate sibling project, not application source
+  src/
     tokens.css
-    smbc-theme.metadata.json
+    fonts.css
+    styles.css
     dx.smbc.css
-    smbc-devextreme-overrides.css
-    smbc-viz-palette.ts
+    overrides.css
+    viz.ts
+    assets.ts
+    index.ts
+  assets/
+    fonts/
+    smbc-logo.svg
+    favicon.ico
+  theme/smbc-theme.metadata.json
+  scripts/
+  dist/  # generated runtime package
 ```
 
 ### Directory responsibilities
 
 | Path | Owns | Must not own |
 |---|---|---|
-| `src/theme/` | Brand and semantic tokens, ThemeBuilder input/output, global DevExtreme corrections, and the chart palette bridge | Application shell layout, page composition, reference-page demos, or one-off component dimensions |
+| `../devextreme-theme/` | Brand and semantic tokens, ThemeBuilder input/output, global DevExtreme corrections, and the chart palette bridge | Application shell layout, page composition, reference-page demos, or one-off component dimensions |
 | `src/styles/` | Application-level primitives and reusable `.app-*` patterns | Brand palette definitions, generated vendor CSS, or styles used only by `/design-system` |
 | `src/app/` | Routing, the root shell, global navigation, and application-specific React components | Theme generation or reference-page examples |
 | `src/design-system/` | The development reference page, demonstrations, regression surface, and demo fixtures | Production business components or the canonical implementation of a shared style |
-| `src/assets/` | Locally bundled fonts and other static brand assets | Remote asset references or component styles |
+| `../devextreme-theme/assets/` | Locally bundled fonts and other static brand assets | Remote asset references or component styles |
 
 ### Theme ownership
 
-`src/theme/tokens.css` contains reusable visual decisions: palette primitives,
+`../devextreme-theme/src/tokens.css` contains reusable visual decisions: palette primitives,
 semantic colours, type scale, spacing, shape, borders, shadows, motion, and
 focus roles. Components consume semantic tokens whenever one exists. A value
 belongs here only when changing it should consistently affect multiple
@@ -101,17 +111,18 @@ The remaining theme files have narrow responsibilities:
 - `smbc-theme.metadata.json` is ThemeBuilder configuration updated by the theme
   synchronisation script;
 - `dx.smbc.css` is generated vendor CSS and must never be edited manually;
-- `smbc-devextreme-overrides.css` contains shared corrections that cannot be
+- `overrides.css` contains shared corrections that cannot be
   expressed through the public DevExtreme API or ThemeBuilder metadata;
-- `smbc-viz-palette.ts` exposes semantic CSS colours to DevExtreme charts.
+- `viz.ts` exposes semantic CSS colours to DevExtreme charts.
 
 ### Shared application-style ownership
 
-`src/styles/index.css` is an import manifest only. It defines the global loading
-order and should not contain selectors. The imported files are divided by
-purpose:
+`src/styles/index.css` is an import manifest only. It defines application-pattern
+loading order and should not contain selectors. Fonts come from the package;
+optional shell helpers load separately from `src/main.tsx`. Application files
+are divided by purpose:
 
-- `fonts.css` registers locally bundled font files;
+- `smbc-shell.css` owns optional SMBC sidebar/card helpers;
 - `typography.css` owns the document baseline and reusable text helpers;
 - `layout.css` owns reusable shell, page-header, grid, row, and stack patterns;
 - `components.css` owns reusable application components such as cards, badges,
@@ -127,7 +138,7 @@ directory.
 Small DevExtreme integration rules are allowed here when they apply only inside
 an `.app-*` pattern, for example removing a nested grid border inside a table
 shell. A correction to DevExtreme itself belongs in
-`smbc-devextreme-overrides.css`.
+`overrides.css`.
 
 ### Application ownership
 
@@ -171,7 +182,7 @@ When adding a style, use this order:
    under `styles/`.
 4. If it corrects DevExtreme globally and cannot be configured through its API
    or ThemeBuilder, add the smallest possible rule to
-   `smbc-devextreme-overrides.css`.
+   `overrides.css`.
 5. Otherwise keep it with the owning application component or page.
 6. Keep reference-only presentation under `design-system/` even when that file
    is relatively large.
@@ -205,10 +216,11 @@ header. `index.html` must retain:
 
 `src/main.tsx` loads styles in this order:
 
-1. Local fonts, tokens, and shared application styles.
-2. Generated DevExtreme theme (`dx.smbc.css`).
-3. Shared SMBC DevExtreme overrides.
-4. DevExtreme visualisation palette.
+1. Shared application styles, preserving their original position before vendor CSS.
+2. `@smbc/devextreme-theme/styles.css`: fonts, tokens, generated DevExtreme theme,
+   then shared overrides.
+3. Application-owned optional SMBC shell helpers.
+4. Explicit `registerSmbcVizPalette()` and package favicon initialization.
 5. Minimal application-root CSS.
 
 `dx.smbc.css` is generated and must not be edited manually. ThemeBuilder
@@ -217,12 +229,13 @@ metadata and the generated theme remain under source control.
 When a mapped token or ThemeBuilder setting changes, run:
 
 ```bash
-npm run theme:build
+npm --prefix ../devextreme-theme run theme:build
 ```
 
-This synchronises metadata from `src/theme/tokens.css` before regenerating the
+This synchronises metadata from `../devextreme-theme/src/tokens.css` before regenerating the
 theme. The `devextreme` and `devextreme-themebuilder` versions must remain
-compatible.
+compatible. Regeneration updates package source only: run `npm pack` in that
+project and reinstall its archive here to update the reference application.
 
 ## 5. Typography and local assets
 
@@ -236,7 +249,8 @@ website.
   `.app-display-heading`; this is the approved application display exception,
   not a general-purpose second UI family.
 - Arial and Georgia remain fallbacks only.
-- Use `/smbc-logo.svg` and `/favicon.ico`; do not redraw or remotely embed them.
+- Import `smbcLogoUrl` and `smbcFaviconUrl` from
+  `@smbc/devextreme-theme/assets`; do not redraw or remotely embed them.
 - Align body text left and use sentence case for headings and labels. Do not
   force uppercase navigation labels or eyebrow text.
 - Trajan is not an application font and is reserved for the company name or
@@ -356,12 +370,12 @@ Prefer, in order:
 1. DevExtreme component API.
 2. ThemeBuilder metadata.
 3. Shared application pattern.
-4. `smbc-devextreme-overrides.css`.
+4. `overrides.css`.
 5. Page-specific override as a last resort.
 
 Shared overrides currently integrate typography, editors, buttons, selection
-controls, DataGrid/TreeList, pager, tabs, lists, overlays, calendar, progress,
-and optional dark sidebars.
+controls, DataGrid/TreeList, pager, tabs, lists, overlays, calendar and progress.
+Optional dark sidebar helpers remain in application `smbc-shell.css`.
 
 Important editor rules:
 
@@ -431,7 +445,7 @@ Feedback:
 - empty states explain the situation and offer a relevant next action.
 
 Charts read their palette from CSS semantic tokens through
-`smbc-viz-palette.ts`. Use feedback colours when values carry semantic meaning,
+`viz.ts`. Use feedback colours when values carry semantic meaning,
 and do not rely on colour alone to distinguish data.
 
 ## 11. Accessibility baseline
@@ -503,7 +517,6 @@ Run the repository checks:
 ```bash
 npm run lint
 npm run typecheck
-npm run theme:build
 npm run build
 ```
 
@@ -514,7 +527,7 @@ The relevant source changes are `ea203fe` (sidebar selection), `b123d92`
 (table sizing), and `21ef888` (TagBox, native tables, feedback, touch and anchors).
 
 - DevExtreme, its React wrappers and ThemeBuilder use the same pinned version,
-  26.1.4. Rebuild the generated theme with `npm run theme:build`.
+  26.1.4. Rebuild the generated theme with `npm --prefix ../devextreme-theme run theme:build`.
 - TagBox checkbox dropdowns are capped at 520px and constrained to the viewport.
   Select-all spacing and selected-item colours use shared overrides.
 - Sidebar navigation selection styling excludes lists with selection checkboxes.
@@ -530,3 +543,22 @@ The relevant source changes are `ea203fe` (sidebar selection), `b123d92`
 The reference retains its own navigation and scroll-aware header. SwiftReview's
 authentication, routing, review-stage colours, message actions and administrative
 page layouts belong to the consuming application and are not copied here.
+
+## 15. Theme package ownership
+
+The canonical theme source is the standalone `../devextreme-theme` project. Its runtime
+exports and internal-registry instructions are documented in
+[`../devextreme-theme/README.md`](../devextreme-theme/README.md).
+The demo installs `@smbc/devextreme-theme` from a local versioned `.tgz` archive
+and consumes its exports, including logo and favicon; there are
+no duplicate application-owned brand files. Package JS imports are side-effect
+free. Palette registration happens explicitly after loading the CSS.
+
+Typography helpers, shell layouts, cards, pages, navigation and reference demos
+remain application responsibilities. The theme package includes no React code.
+In `../devextreme-theme`, `npm run pack:check` verifies the runtime tarball
+contract and `npm test` verifies an installed tarball with Node and Vite.
+Run `npm pack` there and reinstall the generated archive in this application
+after changing the theme. See the application README for the update workflow.
+Application `dev`, `typecheck` and `build` use the installed archive; they do not
+compile the theme or depend on a source workspace.

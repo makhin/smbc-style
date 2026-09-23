@@ -1,6 +1,7 @@
 import Chart, { Legend, Series } from 'devextreme-react/chart';
 
-import { smbcVizPalette } from '../../theme/smbc-viz-palette';
+import { SMBC_VIZ_PALETTE_NAME } from '@smbc/devextreme-theme/viz';
+import type { Palette } from 'devextreme/common/charts';
 import Section from '../components/Section';
 import paymentVolume from '../data/payment-volume.json';
 
@@ -18,7 +19,7 @@ export default function ChartsSection() {
         <div className="app-card__body">
           <Chart
             dataSource={paymentVolume}
-            palette={smbcVizPalette.simpleSet}
+            palette={SMBC_VIZ_PALETTE_NAME as Palette}
             height={320}
           >
             <Series

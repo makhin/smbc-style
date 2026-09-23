@@ -7,11 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
-    "theme:build": "node scripts/sync-devextreme-theme.mjs && devextreme build-theme --input-file src/theme/smbc-theme.metadata.json --output-file src/theme/dx.smbc.css --remove-external-resources",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@smbc/devextreme-theme": "file:../devextreme-theme/smbc-devextreme-theme-0.1.0.tgz",
     "devextreme": "26.1.4",
     "devextreme-react": "26.1.4",
     "react": "^19.2.8",
@@ -24,8 +24,6 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
-    "devextreme-cli": "^1.17.0",
-    "devextreme-themebuilder": "26.1.4",
     "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",

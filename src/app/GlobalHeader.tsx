@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { smbcLogoUrl } from '@smbc/devextreme-theme/assets';
+
 import './global-header.css';
 
 export default function GlobalHeader() {
@@ -58,7 +60,7 @@ export default function GlobalHeader() {
     >
       <div className="global-header__inner">
         <NavLink className="global-header__brand" to="/" aria-label="SMBC home">
-          <img src="/smbc-logo.svg" alt="SMBC" width="146" height="42" />
+          <img src={smbcLogoUrl} alt="SMBC" width="146" height="42" />
           <span>Application UI</span>
         </NavLink>
 

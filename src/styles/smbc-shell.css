@@ -1,0 +1,52 @@
+/*
+ * Optional application-shell helpers.
+ * These are not required by DevExtreme, but reproduce the SMBC-style
+ * dark green navigation + bright "fresh green" active marker.
+ */
+.smbc-app-shell {
+  min-height: 100vh;
+  background: var(--color-surface-subtle);
+  color: var(--color-text-primary);
+}
+
+.smbc-sidebar {
+  --focus-ring-color: var(--focus-ring-color-on-dark);
+
+  background: var(--color-action-primary);
+  color: var(--color-text-inverse);
+}
+
+.smbc-sidebar .dx-list,
+.smbc-sidebar .dx-list-item,
+.smbc-sidebar .dx-treeview,
+.smbc-sidebar .dx-treeview-item {
+  background: transparent;
+  color: var(--color-text-inverse);
+}
+
+.smbc-sidebar .dx-list-item,
+.smbc-sidebar .dx-treeview-item {
+  border-radius: 0;
+}
+
+.smbc-sidebar
+  .dx-list:not(.dx-list-select-decorator-enabled)
+  .dx-list-item.dx-list-item-selected,
+.smbc-sidebar .dx-treeview-node.dx-state-selected > .dx-treeview-item {
+  background: var(--color-navigation-active);
+  box-shadow: inset var(--border-width-emphasis) 0 0 var(--color-action-accent);
+  color: var(--color-text-inverse);
+}
+
+.smbc-sidebar .dx-list-item.dx-state-hover,
+.smbc-sidebar .dx-treeview-item.dx-state-hover {
+  background: var(--color-navigation-hover);
+}
+
+/* Generic application cards, useful around DevExtreme widgets */
+.smbc-card {
+  background: var(--color-surface-default);
+  border: var(--border-width-default) solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
