@@ -21,16 +21,15 @@ export default defineConfig([
   },
   {
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/design-system/sections/ChartsSection.tsx'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              group: ['devextreme-react', 'devextreme-react/*'],
+              group: ['devextreme-react', 'devextreme-react/*', 'devextreme', 'devextreme/*'],
               message:
-                'Use @smbc/ui or its data-grid/validation subpaths. ChartsSection is the documented chart exception.',
+                'Use @smbc/ui or its data-grid/validation subpaths.',
             },
           ],
         },

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Accordion,
   Button,
@@ -6,6 +7,7 @@ import {
   MultiSelect,
   NumberInput,
   TextInput,
+  Toolbar,
 } from '@smbc/ui';
 import {
   EmailRule,
@@ -35,6 +37,24 @@ const accordionItems = [
 ];
 
 export default function ComponentsSection() {
+  const [toolbarAction, setToolbarAction] = useState('Ready');
+  const renderRefresh = () => (
+    <Button icon="refresh" onClick={() => setToolbarAction('Payments refreshed')}>
+      Refresh payments
+    </Button>
+  );
+  const renderExport = () => (
+    <Button icon="exportxlsx" onClick={() => setToolbarAction('Export requested')}>
+      Export payments
+    </Button>
+  );
+  const renderHistory = () => (
+    <Button icon="clock" onClick={() => setToolbarAction('History requested')}>
+      View history
+    </Button>
+  );
+  const renderDelete = () => <Button disabled>Delete selected</Button>;
+
   return (
     <Section
       id="components"
@@ -42,6 +62,48 @@ export default function ComponentsSection() {
       description="A small set of common application patterns beyond the basic form controls."
     >
       <div className="ds-component-grid">
+        <Card className="ds-component-card ds-component-grid__wide">
+          <Card.Header>
+            <div>
+              <Card.Title>Toolbar</Card.Title>
+              <div className="app-caption">
+                Actions move into the menu when space is limited
+              </div>
+            </div>
+          </Card.Header>
+          <Card.Body>
+            <Toolbar devExtremeProps={{ elementAttr: { id: 'ds-toolbar', 'aria-label': 'Payment actions' } }}>
+              <Toolbar.Item location="before" render={() => <Toolbar.Group>Payments</Toolbar.Group>} />
+              <Toolbar.Item
+                location="after"
+                locateInMenu="auto"
+                render={renderRefresh}
+                menuItemRender={renderRefresh}
+              />
+              <Toolbar.Item
+                location="after"
+                locateInMenu="auto"
+                render={renderExport}
+                menuItemRender={renderExport}
+              />
+              <Toolbar.Item
+                location="after"
+                locateInMenu="always"
+                render={renderHistory}
+                menuItemRender={renderHistory}
+              />
+              <Toolbar.Item
+                location="after"
+                locateInMenu="always"
+                disabled
+                render={renderDelete}
+                menuItemRender={renderDelete}
+              />
+            </Toolbar>
+            <p role="status" id="ds-toolbar-status" className="app-caption">{toolbarAction}</p>
+          </Card.Body>
+        </Card>
+
         <Card className="ds-component-card">
           <Card.Header>
             <div>

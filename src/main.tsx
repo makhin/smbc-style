@@ -2,15 +2,12 @@ import '@smbc/ui/styles.css';
 import './styles/index.css';
 import '@smbc/devextreme-theme/styles.css';
 import './styles/smbc-shell.css';
-import { registerSmbcVizPalette } from '@smbc/devextreme-theme/viz';
 import { smbcFaviconUrl } from '@smbc/devextreme-theme/assets';
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './app/App'
-
-registerSmbcVizPalette();
 
 const favicon = document.createElement('link');
 favicon.rel = 'icon';

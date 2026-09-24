@@ -2,7 +2,6 @@ import { StatusBadge } from '@smbc/ui';
 import AccessibilitySection from './sections/AccessibilitySection';
 import ButtonsSection from './sections/ButtonsSection';
 import CardsSection from './sections/CardsSection';
-import ChartsSection from './sections/ChartsSection';
 import ComponentsSection from './sections/ComponentsSection';
 import DataGridSection from './sections/DataGridSection';
 import DialogsSection from './sections/DialogsSection';
@@ -43,7 +42,6 @@ const sections = [
     Component: DialogsSection,
   },
   { id: 'states', navigationLabel: 'States', Component: StatesSection },
-  { id: 'charts', navigationLabel: 'Charts', Component: ChartsSection },
   {
     id: 'accessibility',
     navigationLabel: 'Accessibility',

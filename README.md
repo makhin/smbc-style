@@ -1,6 +1,6 @@
 # SMBC Application UI
 
-React application shell and design-system reference built with DevExtreme and
+React application shell and design-system reference consuming
 `@smbc/devextreme-theme` and `@smbc/ui`. The implementation standard and UI rules live in
 [`DESIGN_GUIDE.md`](DESIGN_GUIDE.md).
 
@@ -34,9 +34,7 @@ Edit tokens, metadata, CSS or assets there, then run:
 ```bash
 cd ../devextreme-theme
 npm ci
-npm run typecheck
-npm run pack:check
-npm test
+npm run check
 npm pack
 cd ../smbc-style
 npm install ../devextreme-theme/smbc-devextreme-theme-0.1.0.tgz
@@ -63,22 +61,25 @@ application.
 
 ## Style order
 
-`src/main.tsx` loads:
+`src/main.tsx` uses this CSS order:
 
-1. `@smbc/ui/styles.css`, then shared application patterns, preserving their position before vendor rules.
-2. `@smbc/devextreme-theme/styles.css`: fonts, tokens, generated theme, overrides.
-3. Application-owned SMBC shell helpers.
-4. Explicit `registerSmbcVizPalette()` and package favicon initialization.
-5. Minimal application-root CSS.
+```ts
+import '@smbc/ui/styles.css';
+import './styles/index.css';
+import '@smbc/devextreme-theme/styles.css';
+import './styles/smbc-shell.css';
+import './index.css';
+```
+
+The theme loads fonts, tokens, generated vendor CSS and shared overrides.
+Do not load a stock DevExtreme theme as well. Favicon initialization uses the
+package asset URL; the application does not register a visualization palette.
 
 ## Package API
 
 ```ts
 import '@smbc/devextreme-theme/styles.css';
 import { smbcLogoUrl, smbcFaviconUrl } from '@smbc/devextreme-theme/assets';
-import { registerSmbcVizPalette } from '@smbc/devextreme-theme/viz';
-
-registerSmbcVizPalette();
 ```
 
 The package owns the canonical theme, semantic tokens, corporate fonts, logo,
@@ -103,9 +104,7 @@ components because they are layout constraints, not shared design decisions.
 ```sh
 cd ../smbc-ui
 npm ci
-npm run typecheck
-npm run pack:check
-npm test
+npm run check
 npm pack
 cd ../smbc-style
 npm install ../smbc-ui/smbc-ui-0.1.0.tgz
@@ -116,11 +115,17 @@ npm run build
 
 Use `@smbc/ui` for ordinary controls and primitives, with explicit `data-grid`
 and `validation` subpaths for advanced vendor configuration. Direct
-`devextreme-react/*` imports are restricted by ESLint. The only exception is
-`ChartsSection.tsx` (`Chart`, `Legend`, `Series`); chart palette ownership remains
-with the theme. Its direct `devextreme/common/charts` import is type-only.
+`devextreme-react` and `devextreme` imports, including subpaths, are restricted
+by ESLint without exceptions. The reference application has no chart section.
+Toolbar uses `Toolbar.Item` templates with our `Button`, including
+`menuItemRender`; vendor `widget` strings are not application APIs. ESLint
+checks static imports, so review dynamic imports and widget configuration too.
 
 Reusable card, field, badge, filter, toolbar, callout, KPI, empty-state and table
 shell CSS now belongs to the UI package. Application components.css retains
 native reference-table scrolling, page loading/error layout and divider rules.
-See [the migration report](docs/smbc-ui-migration.md) for verification and scope.
+
+The three projects have separate responsibilities: `devextreme-theme` owns the
+visual theme and assets; `smbc-ui` owns reusable React components; `smbc-style`
+consumes both and demonstrates integration. They do not require a shared npm
+workspace. Install and test their built packages rather than source aliases.
