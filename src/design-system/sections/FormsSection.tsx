@@ -50,7 +50,7 @@ export default function FormsSection() {
               />
             </Field>
 
-            <Field wide id="ds-payment-note" label="Payment note" required>
+            <Field className="md:col-span-2" id="ds-payment-note" label="Payment note" required>
               <TextArea
                 height={88}
                 placeholder="Enter a short operational note"

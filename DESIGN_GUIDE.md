@@ -421,7 +421,7 @@ defect in the shared theme.
 
 Use `sm` 640px, `md` 768px, `lg` 1024px and `xl` 1280px. These replace
 620/760/900/1100/1200px thresholds; the unused 980px review helper is removed.
-Header menu and wide Fields transition at `md`. Reference sidebar becomes
+The header menu and the reference page's two-column Field span transition at `md`. Reference sidebar becomes
 horizontal below `lg`, leaving more content space from 901–1023px. Forms,
 swatches, KPIs and states use their widest layouts at `xl`, avoiding cramped
 columns between 1101/1201 and 1279px. Intermediate widths and 320px reflow are
@@ -517,9 +517,9 @@ uses its layout and theme. Do not replace it with application flex styles.
 
 ### Toolbar composition
 
-Use `Toolbar.Item` to place content. `Toolbar.Group` is an HTML flex container
-inside an item template; it is no longer a direct child of Toolbar. Give each
-action its own item when it should move independently into the overflow menu.
+Use `Toolbar.Item` to place content. Use ordinary HTML inside item templates
+when related controls need grouping. Give each action its own item when it
+should move independently into the overflow menu.
 Use our `Button` in both templates, without `widget="dxButton"` or vendor
 button `options` objects:
 
@@ -535,7 +535,7 @@ function PaymentToolbar({ refresh }: { refresh: () => void }) {
     <Toolbar>
       <Toolbar.Item
         location="before"
-        render={() => <Toolbar.Group>Payments</Toolbar.Group>}
+        render={() => <span>Payments</span>}
       />
       <Toolbar.Item
         location="after"
@@ -722,8 +722,7 @@ Choose one validation owner per control:
 Use explicit grid configuration exports and stable row keys. Check selection,
 filtering, paging, custom cells and server-data behaviour after conversion;
 the wrapper does not implement the application's data-access policy. Retain
-loading, empty, no-results and error states. Replace direct Toolbar.Group
-children with item templates as shown in section 15.
+loading, empty, no-results and error states. Place toolbar content in item templates as shown in section 15.
 
 ### 16.6 Enforce the boundary and verify each stage
 
@@ -750,3 +749,17 @@ The migration is complete when intended screens use the shared component API,
 legacy duplicate styles/assets are removed, package versions are reproducible,
 and business and accessibility checks pass. Keep each stage in a reviewable
 commit so its code, package versions and lockfile can be rolled back together.
+
+## Local composition and package refresh
+
+FilterPanel owns its surface and padding; the application chooses its grid,
+gaps and breakpoints. Field owns label/help/error associations, never grid
+placement. Replace the removed `wide` prop with `className="md:col-span-2"`
+where the page requires that span. `Toolbar.Group` is removed; use ordinary
+HTML in Toolbar.Item templates. Keep Card and TableShell for their shared
+appearance and vendor integration.
+
+Run `npm run refresh:packages` in this application to check and pack the theme,
+refresh UI's theme archive, check and pack UI, and validate the application
+against both archives. The command refreshes consumer locks even when local
+package versions are unchanged. It does not publish or create a workspace.

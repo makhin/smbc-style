@@ -38,6 +38,7 @@ try {
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Page overflows at ${width}px`);
     assert.equal(await columns('#forms .smbc-ui-card > div > div'), width >= 1280 ? 4 : width >= 640 ? 2 : 1);
     assert.equal(await columns('#filters > div:last-child > div'), width >= 1280 ? 4 : width >= 768 ? 2 : 1);
+    assert.equal(await page.locator('#ds-payment-note').evaluate((el) => getComputedStyle(el.closest('.smbc-ui-field')).gridColumnStart), width >= 768 ? 'span 2' : 'auto');
     assert.equal(await page.locator('aside').evaluate((el) => getComputedStyle(el).position), width >= 1024 ? 'sticky' : 'static');
     assert.equal(await page.getByRole('button', { name: 'Open navigation' }).isVisible(), width < 768);
   }

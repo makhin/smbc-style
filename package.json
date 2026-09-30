@@ -9,7 +9,8 @@
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test:reference": "npm run build && node scripts/check-reference.mjs"
+    "test:reference": "npm run build && node scripts/check-reference.mjs",
+    "refresh:packages": "node scripts/refresh-packages.mjs"
   },
   "dependencies": {
     "@smbc/devextreme-theme": "file:../devextreme-theme/smbc-devextreme-theme-0.1.0.tgz",

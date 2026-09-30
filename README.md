@@ -26,27 +26,24 @@ npm run build
 
 Application builds use the installed theme and do not regenerate it.
 
-## Updating the theme
+## Updating local packages
 
-The standalone source project is [`../devextreme-theme`](../devextreme-theme/README.md).
-Edit tokens, metadata, CSS or assets there, then run:
+With all three repositories checked out as sibling directories, run:
 
-```bash
-cd ../devextreme-theme
-npm ci
-npm run check
-npm pack
-cd ../smbc-style
-npm install ../devextreme-theme/smbc-devextreme-theme-0.1.0.tgz
-npm run build
+```sh
+npm run refresh:packages
 ```
 
-`npm pack` builds the theme automatically. For a new release, increment its
-version and use the resulting versioned archive filename in the install command.
-Commit the updated application manifest and lockfile together. If rebuilding the
-same version locally, explicitly reinstall the archive as shown above; editing
-package source files alone does not update the installed copy. Share the matching
-archive with anyone installing this checkout; a registry is not required.
+The command installs and checks the theme, packs its checked output, reinstalls
+that archive in UI, checks and packs UI, and installs both archives here. It then
+runs a clean install, lint, typecheck and the production browser suite. Install
+Chromium once with `npx playwright install chromium` before the first run.
+Failures stop the sequence. Same-version tarball integrity is refreshed in the
+consumer lockfiles; review and commit the updated locks with your changes.
+
+This is development orchestration, not a workspace or a package source alias.
+Individual repository build/check commands remain available. If a package
+version changes, also review its peer dependency compatibility range.
 
 Never manually edit generated `dx.smbc.css` or files under `node_modules`.
 
@@ -198,3 +195,18 @@ The three projects have separate responsibilities: `devextreme-theme` owns the
 visual theme and assets; `smbc-ui` owns reusable React components; `smbc-style`
 consumes both and demonstrates integration. They do not require a shared npm
 workspace. Install and test their built packages rather than source aliases.
+
+### Layout ownership in shared components
+
+`FilterPanel` supplies the styled surface; put the grid directly on the page:
+
+```tsx
+<FilterPanel className="grid grid-cols-1 gap-x-4 gap-y-3 md:grid-cols-2 xl:grid-cols-4">
+  <Field label="Reference"><TextInput /></Field>
+  <Field label="Notes" className="md:col-span-2"><TextArea /></Field>
+</FilterPanel>
+```
+
+`Field wide` and `Toolbar.Group` are removed. Use page layout classes for field
+spans and ordinary HTML inside `Toolbar.Item` templates. A text-only toolbar
+item can simply render a `span`. Card and TableShell remain semantic components.

@@ -73,7 +73,7 @@ export default function ComponentsSection() {
           </Card.Header>
           <Card.Body>
             <Toolbar devExtremeProps={{ elementAttr: { id: 'ds-toolbar', 'aria-label': 'Payment actions' } }}>
-              <Toolbar.Item location="before" render={() => <Toolbar.Group>Payments</Toolbar.Group>} />
+              <Toolbar.Item location="before" render={() => <span>Payments</span>} />
               <Toolbar.Item
                 location="after"
                 locateInMenu="auto"

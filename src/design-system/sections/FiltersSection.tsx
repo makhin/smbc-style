@@ -14,7 +14,7 @@ const statuses = ['Pending', 'Under review', 'Approved', 'Rejected', 'Failed'];
 export default function FiltersSection() {
   return (
     <Section id="filters" title="Filters">
-      <FilterPanel>
+      <FilterPanel className="grid grid-cols-1 gap-x-4 gap-y-3 md:grid-cols-2 xl:grid-cols-4">
         <Field id="ds-filter-reference" label="Reference">
           <TextInput placeholder="Payment reference" />
         </Field>
