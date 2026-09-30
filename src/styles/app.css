@@ -1,0 +1,77 @@
+/* One application entry. No Preflight and no scanning node_modules/@smbc/ui.
+ * The compact vendor typography follows our baseline, as before; utilities win over
+ * shared component composition without changing theme-package ownership. */
+@layer theme, base, vendor, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "@smbc/devextreme-theme/styles.css" layer(vendor);
+@import "@smbc/ui/styles.css" layer(components);
+@import "../app/global-header.css" layer(components);
+@import "./reference-vendor.css" layer(components);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@reference "@smbc/devextreme-theme/tailwind.css";
+@source "..";
+
+/* Existing application baseline, not Tailwind Preflight. In a layer so
+ * individual JSX utilities can deliberately adjust native typography. */
+@layer base {
+  html {
+    box-sizing: border-box;
+    font-family: var(--font-sans);
+    color: var(--color-text-primary);
+    background: var(--color-page-background);
+    scroll-padding-top: calc(var(--global-header-height, 0px) + var(--space-4));
+    scroll-behavior: smooth;
+  }
+
+  *, *::before, *::after { box-sizing: inherit; }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-md);
+    font-variant-numeric: lining-nums proportional-nums;
+    line-height: var(--line-height-normal);
+    text-align: left;
+    color: var(--color-text-primary);
+    background: var(--color-page-background);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: var(--color-action-tap-highlight);
+  }
+
+  #root { min-height: 100vh; }
+  h1, h2, h3, h4, h5, h6, p { margin: 0; }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    text-transform: none;
+    text-wrap: balance;
+    line-height: var(--line-height-tight);
+    font-weight: var(--font-weight-semibold);
+  }
+  h1 { font-size: var(--font-size-2xl); }
+  h2 { font-size: var(--font-size-xl); }
+  h3 { font-size: var(--font-size-lg); }
+
+  a { color: var(--color-text-link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible, [tabindex='0']:focus-visible {
+    outline: var(--outline-width) solid var(--focus-ring-color);
+    outline-offset: var(--outline-offset);
+  }
+  a, button, [role='button'] { touch-action: manipulation; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+}
+
+@layer components {
+  /* The sidebar follows the dynamically hidden header, including reduced motion. */
+  .reference-nav {
+    transition: top var(--transition-normal), height var(--transition-normal);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reference-nav { transition: none; }
+  }
+}

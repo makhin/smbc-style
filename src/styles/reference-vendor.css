@@ -1,0 +1,29 @@
+/* Reference-specific vendor contexts, never generic application layout. */
+.dx-widget { touch-action: manipulation; }
+
+#components .dx-accordion-item-body {
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+/* Deliberate dark-surface interaction demo for controls without an inverse API. */
+.ds-focus-surface--dark .dx-button {
+  border-color: var(--color-border-inverse);
+  color: var(--color-text-inverse);
+}
+
+.ds-focus-surface--dark .dx-button-mode-outlined:is(
+  .dx-state-hover,
+  .dx-state-focused,
+  .dx-state-selected
+) {
+  background: var(--color-navigation-hover);
+  color: var(--color-text-inverse);
+}
+
+.ds-focus-surface--dark .dx-button-mode-outlined.dx-state-active {
+  background: var(--color-navigation-active);
+  color: var(--color-text-inverse);
+}
+
+.ds-focus-surface--dark .dx-button-mode-outlined .dx-icon { color: inherit; }

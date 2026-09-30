@@ -18,25 +18,25 @@ export default function AccessibilitySection() {
       title="Accessibility reference"
       description="Focus, target size, keyboard navigation, and contrast must be visible here."
     >
-      <div className="ds-accessibility-grid">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Card>
           <Card.Body>
             <h3>Keyboard focus</h3>
-            <p className="app-muted">
+            <p className="text-fg-muted">
               Tab through these controls. Focus must remain obvious on both
               light and dark surfaces.
             </p>
 
-            <div className="ds-focus-surface ds-focus-surface--light">
+            <div className="mt-4 flex flex-wrap items-center gap-3 rounded-card border-[length:var(--border-width-default)] border-border bg-surface p-4">
               <Button>Light surface</Button>
               <a href="#accessibility">Text link</a>
             </div>
 
-            <div className="ds-focus-surface ds-focus-surface--dark">
+            <div className="ds-focus-surface--dark mt-4 flex flex-wrap items-center gap-3 rounded-card bg-primary p-4 [--focus-ring-color:var(--focus-ring-color-on-dark)]">
               <Button devExtremeProps={{ type: 'normal' }} variant="secondary">
                 Dark surface
               </Button>
-              <a href="#accessibility">Text link</a>
+              <a className="text-fg-inverse" href="#accessibility">Text link</a>
             </div>
           </Card.Body>
         </Card>
@@ -49,7 +49,7 @@ export default function AccessibilitySection() {
               selectedIndex={selectedTab}
               onChange={setSelectedTab}
             />
-            <div className="ds-tab-content">
+            <div className="border-[length:var(--border-width-default)] border-t-0 border-border bg-surface p-4">
               Selected: <strong>{tabs[selectedTab].text}</strong>
             </div>
           </Card.Body>

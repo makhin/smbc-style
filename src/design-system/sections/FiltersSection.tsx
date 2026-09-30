@@ -27,7 +27,7 @@ export default function FiltersSection() {
         <Field id="ds-filter-to" label="To">
           <DatePicker />
         </Field>
-        <div className="ds-filter-actions">
+        <div className="col-span-full flex flex-wrap justify-end gap-2 pt-1">
           <Button variant="tertiary">Reset</Button>
           <Button variant="primary">Apply filters</Button>
         </div>

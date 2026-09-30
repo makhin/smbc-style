@@ -61,12 +61,12 @@ export default function ComponentsSection() {
       title="More DevExtreme components"
       description="A small set of common application patterns beyond the basic form controls."
     >
-      <div className="ds-component-grid">
-        <Card className="ds-component-card ds-component-grid__wide">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Card className="col-span-full min-w-0">
           <Card.Header>
             <div>
               <Card.Title>Toolbar</Card.Title>
-              <div className="app-caption">
+              <div className="text-xs text-fg-muted">
                 Actions move into the menu when space is limited
               </div>
             </div>
@@ -100,15 +100,15 @@ export default function ComponentsSection() {
                 menuItemRender={renderDelete}
               />
             </Toolbar>
-            <p role="status" id="ds-toolbar-status" className="app-caption">{toolbarAction}</p>
+            <p role="status" id="ds-toolbar-status" className="text-xs text-fg-muted">{toolbarAction}</p>
           </Card.Body>
         </Card>
 
-        <Card className="ds-component-card">
+        <Card className="min-w-0">
           <Card.Header>
             <div>
               <Card.Title>NumberBox</Card.Title>
-              <div className="app-caption">Formatted numeric input</div>
+              <div className="text-xs text-fg-muted">Formatted numeric input</div>
             </div>
           </Card.Header>
           <Card.Body>
@@ -127,11 +127,11 @@ export default function ComponentsSection() {
           </Card.Body>
         </Card>
 
-        <Card className="ds-component-card">
+        <Card className="min-w-0">
           <Card.Header>
             <div>
               <Card.Title>TagBox</Card.Title>
-              <div className="app-caption">Searchable multiple selection</div>
+              <div className="text-xs text-fg-muted">Searchable multiple selection</div>
             </div>
           </Card.Header>
           <Card.Body>
@@ -152,11 +152,11 @@ export default function ComponentsSection() {
           </Card.Body>
         </Card>
 
-        <Card className="ds-component-card ds-component-grid__wide">
+        <Card className="col-span-full min-w-0">
           <Card.Header>
             <div>
               <Card.Title>Accordion</Card.Title>
-              <div className="app-caption">
+              <div className="text-xs text-fg-muted">
                 Progressive disclosure for related content
               </div>
             </div>
@@ -171,22 +171,22 @@ export default function ComponentsSection() {
           </Card.Body>
         </Card>
 
-        <Card className="ds-component-card ds-component-grid__wide">
+        <Card className="col-span-full min-w-0">
           <Card.Header>
             <div>
               <Card.Title>Validation</Card.Title>
-              <div className="app-caption">
+              <div className="text-xs text-fg-muted">
                 Field-level rules with a form-level summary
               </div>
             </div>
           </Card.Header>
           <Card.Body>
             <form
-              className="ds-validation-form"
+              className="flex flex-col gap-4"
               onSubmit={(event) => event.preventDefault()}
             >
-              <ValidationGroup>
-                <div className="ds-validation-fields">
+              <ValidationGroup className="flex flex-col gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field id="ds-approver-email" label="Approver email" required>
                     <TextInput placeholder="name@smbcgroup.com">
                       <Validator>
@@ -214,8 +214,8 @@ export default function ComponentsSection() {
                   </Field>
                 </div>
 
-                <div className="ds-validation-actions">
-                  <ValidationSummary />
+                <div className="flex flex-col items-start justify-between gap-4 border-t-[length:var(--border-width-default)] border-border pt-3 sm:flex-row">
+                  <ValidationSummary className="flex-auto" />
                   <Button submit variant="primary">
                     Validate fields
                   </Button>

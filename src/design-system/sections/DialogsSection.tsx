@@ -7,7 +7,7 @@ export default function DialogsSection() {
   const [toastVisible, setToastVisible] = useState(false);
   return (
     <Section id="dialogs" title="Dialogs & feedback">
-      <div className="ds-control-row">
+      <div className="flex flex-wrap items-center gap-3">
         <Button variant="primary" onClick={() => setPopupVisible(true)}>
           Open dialog
         </Button>

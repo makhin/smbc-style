@@ -8,7 +8,7 @@ export default function StatusSection() {
       title="Status system"
       description="Business state uses text plus semantic styling; colour is never the only cue."
     >
-      <div className="ds-control-row">
+      <div className="flex flex-wrap items-center gap-3">
         <StatusBadge>Cancelled</StatusBadge>
         <StatusBadge tone="info">Pending</StatusBadge>
         <StatusBadge tone="warning">Under review</StatusBadge>
@@ -18,20 +18,20 @@ export default function StatusSection() {
         <StatusBadge tone="brand">Selected</StatusBadge>
       </div>
 
-      <div className="ds-message-grid">
-        <Callout className="ds-message">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Callout className="flex flex-col gap-1">
           <strong>Information</strong>
           <span>The payment has supporting documents.</span>
         </Callout>
-        <Callout className="ds-message" tone="brand">
+        <Callout className="flex flex-col gap-1" tone="brand">
           <strong>Brand highlight</strong>
           <span>Fresh Green is emphasis, not a universal success colour.</span>
         </Callout>
-        <Callout className="ds-message" tone="warning">
+        <Callout className="flex flex-col gap-1" tone="warning">
           <strong>Attention required</strong>
           <span>Beneficiary details changed since the previous payment.</span>
         </Callout>
-        <Callout className="ds-message" tone="danger">
+        <Callout className="flex flex-col gap-1" tone="danger">
           <strong>Processing failed</strong>
           <span>The payment could not be submitted.</span>
         </Callout>

@@ -9,7 +9,7 @@ export default function ButtonsSection() {
       title="Buttons"
       description="Primary, secondary, destructive, disabled, and icon-only actions."
     >
-      <div className="ds-control-row">
+      <div className="flex flex-wrap items-center gap-3">
         <Button variant="primary">Approve payment</Button>
         <Button icon="exportxlsx" variant="secondary">
           Export

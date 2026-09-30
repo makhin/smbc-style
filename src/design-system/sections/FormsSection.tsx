@@ -22,7 +22,7 @@ export default function FormsSection() {
     >
       <Card>
         <Card.Body>
-          <div className="ds-form-grid">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <Field id="ds-reference" label="Payment reference">
               <TextInput defaultValue="PAY-2026-008421" />
             </Field>
@@ -69,7 +69,7 @@ export default function FormsSection() {
               <TextInput value="Unavailable" disabled />
             </Field>
 
-            <Field className="ds-checkbox-field">
+            <Field className="flex min-h-[58px] items-end">
               <Checkbox label="Require additional approval" />
             </Field>
           </div>

@@ -1,6 +1,6 @@
 # SMBC Application UI Guide
 
-**Version:** 0.4 (24 September 2026)
+**Version:** 0.5 (30 September 2026)
 **Scope:** the React + TypeScript reference application and applications adopting the shared packages
 **UI foundation:** DevExtreme 26.1.4, Fluent Blue Light Compact
 **Visual reference:** SMBC EMEA
@@ -25,7 +25,7 @@ Use this order when implementation details conflict:
 
 1. Approved internal SMBC standards.
 2. `../devextreme-theme/src/tokens.css` for reusable visual values.
-3. Reusable components in `../smbc-ui`, application layouts in `src/styles`, and DevExtreme overrides in
+3. Reusable components in `../smbc-ui`, application composition in JSX, and DevExtreme overrides in
    `../devextreme-theme/src/overrides.css`.
 4. `/design-system` for rendered states and regression review.
 5. Page-specific styles only for local layout constraints.
@@ -35,8 +35,8 @@ Rules:
 - Components consume semantic tokens, not palette primitives.
 - Do not introduce a colour, spacing value, radius, shadow, or font size when a
   suitable token already exists.
-- Keep responsive breakpoints and truly one-off dimensions local to the owning
-  component.
+- Use standard Tailwind `sm/md/lg/xl` breakpoints; keep truly one-off geometry
+  local to the owning component.
 - Do not duplicate shared theme corrections in reference-page CSS.
 
 ## 3. Current application structure
@@ -44,178 +44,74 @@ Rules:
 ```text
 src/
   main.tsx
-  index.css
-  app/
-    App.tsx
-    router.tsx
-    RootLayout.tsx
-    GlobalHeader.tsx
-    global-header.css
+  app/                # routing, RootLayout, GlobalHeader JSX composition
+    global-header.css # only geometry/animation/hide-show mechanics
   design-system/
     DesignSystemPage.tsx
-    components/
-      Section.tsx
-      section.css
-    data/
-    sections/
-    design-system.css
+    components/Section.tsx
+    sections/         # semantic UI components + local Tailwind composition
+    data/             # serialisable demo fixtures
   styles/
-    smbc-shell.css
-    typography.css
-    layout.css
-    components.css
-    pages.css
-    index.css
-../devextreme-theme/  # separate sibling project, not application source
-  src/
-    tokens.css
-    fonts.css
-    styles.css
-    dx.smbc.css
-    overrides.css
-    viz.ts
-    assets.ts
-    index.ts
-  assets/
-    fonts/
-    smbc-logo.svg
-    favicon.ico
-  theme/smbc-theme.metadata.json
-  scripts/
-  dist/  # generated runtime package
-../smbc-ui/          # separate React component library
-  src/components/
-  src/data-grid/
-  src/validation/
-  src/styles/
-  scripts/
-  tests/
-  dist/             # generated runtime package
+    app.css           # sole CSS entry, layers, sources, document baseline
+    reference-vendor.css # explicit reference-only vendor contexts
+scripts/check-reference.mjs # production browser checks and screenshots
+../devextreme-theme/
+  src/tokens.css      # canonical design values
+  src/tailwind.css    # compile-time aliases only, @theme inline
+  src/dx.smbc.css     # generated; never edit manually
+  src/overrides.css   # shared corporate DevExtreme corrections
+  assets/            # fonts, logo, favicon
+../smbc-ui/
+  src/components/    # semantic controls; ui: prefixed utilities in JSX
+  src/styles/styles.css # Tailwind v4 CLI entry, no Preflight
+  src/styles/devextreme-overrides.css # private component/vendor hooks
+  tests/             # isolated installed-tarball consumer
 ```
 
-### Directory responsibilities
+### Ownership and placement
 
-| Path | Owns | Must not own |
-|---|---|---|
-| `../devextreme-theme/` | Brand and semantic tokens, ThemeBuilder input/output, global DevExtreme corrections, and the chart palette bridge | Application shell layout, page composition, reference-page demos, or one-off component dimensions |
-| `../smbc-ui/` | Reusable React controls, component composition, accessibility wiring, component CSS and explicit vendor configuration exports | Brand tokens, fonts, routing, business workflows or application navigation |
-| `src/styles/` | Application-level layout and reusable `.app-*` patterns | Brand palette definitions, generated vendor CSS, or styles used only by `/design-system` |
-| `src/app/` | Routing, the root shell, global navigation, and application-specific React components | Theme generation or reference-page examples |
-| `src/design-system/` | The development reference page, demonstrations, regression surface, and demo fixtures | Production business components or the canonical implementation of a shared style |
-| `../devextreme-theme/assets/` | Locally bundled fonts and other static brand assets | Remote asset references or component styles |
+| Owner | Responsibility |
+| --- | --- |
+| `@smbc/devextreme-theme` | Tokens, assets, fonts, corporate DevExtreme theme/overrides, semantic Tailwind bridge |
+| `@smbc/ui` | Semantic components, accessibility, typed vendor configuration, self-contained compiled component styles |
+| Application JSX | Routing, page composition, grid/flex, spacing, responsive behaviour, utility typography and local decoration |
+| Application CSS | Document baseline and complex local interactions; no parallel layout helper system |
+| Reference page | Demonstrations and fixtures; never canonical production components or tokens |
 
-### Theme ownership
+`src/tokens.css` in the theme is the sole owner of reusable visual values.
+`tailwind.css` maps those values without duplication. Use `font-body` for Myriad
+and `font-brand` for occasional Capitolium display headings. Do not define
+another colour/type/radius/shadow scale in the UI or app.
 
-`../devextreme-theme/src/tokens.css` contains reusable visual decisions: palette primitives,
-semantic colours, type scale, spacing, shape, borders, shadows, motion, and
-focus roles. Components consume semantic tokens whenever one exists. A value
-belongs here only when changing it should consistently affect multiple
-components or application surfaces.
+One-off geometry may use arbitrary utilities, e.g. `max-w-[1500px]`. Corporate
+colour, spacing and type choices must use semantic aliases. Use explicit maps
+for prop-dependent utilities, never `bg-${tone}`. `className` on shared HTML
+components is additive, not a guaranteed conflicting-utility override API.
+No `tailwind-merge` is needed. Deliberate app overrides use the documented layer
+order, not HTML class ordering.
 
-Layout dimensions owned by one component remain with that component. For
-example, global-header dimensions live in `app/global-header.css`, application
-shell dimensions live in `styles/layout.css`, and reference-page dimensions
-live in `design-system/design-system.css`.
+Use ordinary JSX for layout; do not create Stack/Row/Grid/Spacer components or
+`.app-row { @apply ... }`. Keep useful semantic abstractions such as Card,
+Field, FilterPanel and Section. `Section.tsx` owns reference framing through
+utilities and needs no companion stylesheet.
 
-The remaining theme files have narrow responsibilities:
+Vendor correction placement: shared corporate appearance belongs in theme
+`overrides.css`; component-specific integration belongs in UI
+`devextreme-overrides.css`; only deliberate reference demo contexts belong in
+`reference-vendor.css`. Never scatter `.dx-*` selectors through React components.
 
-- `smbc-theme.metadata.json` is ThemeBuilder configuration updated by the theme
-  synchronisation script;
-- `dx.smbc.css` is generated vendor CSS and must never be edited manually;
-- `overrides.css` contains shared corrections that cannot be
-  expressed through the public DevExtreme API or ThemeBuilder metadata;
-- `viz.ts` exposes semantic CSS colours to DevExtreme charts.
+`global-header.css` retains only local geometry, hide/show offset propagation,
+underline/hamburger animation and reduced motion. GlobalHeader JSX owns its
+responsive navigation, surfaces, borders, spacing, logo size and typography.
+Reference sidebar positioning is composed in JSX, with a short CSS transition
+rule for its dynamic offset.
 
-### Shared application-style ownership
+Do not import `design-system/data` into production code. Keep event handlers,
+configuration and TypeScript types in `.ts`/`.tsx`; JSON is for static fixtures.
+New reusable components go in UI and are exercised here in the same release.
 
-`src/styles/index.css` is an import manifest only. It defines application-pattern
-loading order and should not contain selectors. Fonts come from the package;
-optional shell helpers load separately from `src/main.tsx`. Application files
-are divided by purpose:
-
-- `smbc-shell.css` owns optional SMBC sidebar/card helpers;
-- `typography.css` owns the document baseline and reusable text helpers;
-- `layout.css` owns reusable shell, page-header, grid, row, and stack patterns;
-- `components.css` owns native reference-table scrolling, page feedback layouts
-  and divider rules; reusable cards, fields, badges, filters, callouts, KPI
-  blocks, empty states and table shells belong to `@smbc/ui`;
-- `pages.css` owns compositions shared by a class of pages, such as review/detail
-  splits and sticky workflow action bars.
-
-Use `.app-*` for shared application patterns. A page-specific arrangement stays
-co-located with its page until it has a stable meaning and at least one other
-real consumer. File size alone is not a reason to promote local CSS into this
-directory.
-
-Component-specific integration rules, such as removing a grid border inside
-`TableShell`, belong to `@smbc/ui`. A correction to DevExtreme shared across
-applications belongs in the theme `overrides.css`. Application CSS may scope
-layout adjustments to its own containers; it must not duplicate either layer.
-
-### Application ownership
-
-`src/app` owns runtime composition. `App.tsx` installs the router,
-`router.tsx` defines routes, and `RootLayout.tsx` provides cross-route structure.
-React components in this directory may have co-located CSS when the rules belong
-only to that component. `global-header.css`, for example, owns header structure,
-responsive behaviour, and its private dimensions; it still consumes colours,
-spacing, motion, and focus tokens from the theme.
-
-### Design-system reference ownership
-
-`src/design-system` documents and exercises the implementation; it does not
-replace it. Its parts are divided as follows:
-
-- `DesignSystemPage.tsx` composes navigation, page chrome, and section
-  components;
-- `components/Section.tsx` and its co-located `section.css` provide
-  reference-page-only section framing;
-- `sections/` contains one independently maintainable rendered example per
-  topic, with interactive state kept in the section that owns it; a section may
-  import co-located CSS for a rule private to that example;
-- `data/*.json` contains serialisable demo fixtures and option lists only;
-- `design-system.css` owns `.ds-*` page chrome, demo layouts, visual samples,
-  responsive behaviour, and scoped adjustments needed to present examples.
-
-Do not import `design-system/data` or `.ds-*` classes into production
-application code. Keep mappings, event handlers, component configuration, and
-TypeScript types in `.ts`/`.tsx`; use JSON only for static data that contains no
-behaviour. If a useful pattern first appears in the reference page, implement it
-in `@smbc/ui` when it is a reusable component, or under `src/styles` when it
-is application layout, then make the reference page consume that implementation.
-
-### Placement decision
-
-When adding a style, use this order:
-
-1. Use an existing `@smbc/ui` component, semantic token or application layout.
-2. Put reusable visual values in `../devextreme-theme/src/tokens.css`.
-3. Put reusable component behaviour and styles in `../smbc-ui/src`.
-4. Put shared application layout under `src/styles/`.
-5. Put global vendor corrections in `../devextreme-theme/src/overrides.css`
-   only when component configuration or ThemeBuilder cannot express them.
-6. Keep local page layout with its owner and reference-only presentation under
-   `src/design-system/`.
-
-Selector prefixes communicate the same ownership boundary:
-
-- `--color-*`, `--space-*`, and similar semantic custom properties are theme
-  tokens;
-- `.smbc-ui-*` is private to the component library; consume its public props;
-- `.app-*` is a reusable application layout contract;
-- `.ds-*` is private to the design-system reference;
-- component-specific selectors such as `.global-header*` stay with their React
-  component;
-- `.dx-*` integration selectors belong to the theme or UI component that owns
-  the correction; scoped application selectors are only for local layout.
-
-Routes:
-
-- `/` redirects to `/design-system`.
-- `/design-system` renders the component and token reference.
-
-All routes render inside `RootLayout`, which provides the skip link and global
-header. `index.html` must retain:
+Routes: `/` redirects to `/design-system`; both render inside RootLayout.
+Retain the themed viewport in `index.html`:
 
 ```html
 <body class="dx-viewport">
@@ -225,26 +121,34 @@ header. `index.html` must retain:
 
 ## 4. Style loading and generation
 
-`src/main.tsx` uses the following CSS import order:
+`src/main.tsx` loads one CSS entry:
 
 ```ts
-import '@smbc/ui/styles.css';
-import './styles/index.css';
-import '@smbc/devextreme-theme/styles.css';
-import './styles/smbc-shell.css';
-import './index.css';
+import './styles/app.css';
 ```
 
-The application-style manifest loads typography, layout, component-level
-application helpers and page patterns in that order. The theme entry loads
-fonts, tokens, generated DevExtreme CSS and shared overrides. Component and
-reference-page styles also load through their owning modules.
+`app.css` uses the official Tailwind v4 Vite plugin and CSS-first configuration:
 
-Keep this tested cascade when adopting the reference. Do not additionally load
-stock DevExtreme themes or copied theme CSS. `@smbc/ui/styles.css` does not import
-the theme; both package entries are required. Logo and favicon URLs come from
-`@smbc/devextreme-theme/assets`. Favicon initialization is browser code, not a
-CSS loading stage. This application has no charts or palette registration.
+```css
+@layer theme, base, vendor, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "@smbc/devextreme-theme/styles.css" layer(vendor);
+@import "@smbc/ui/styles.css" layer(components);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@reference "@smbc/devextreme-theme/tailwind.css";
+@source "..";
+```
+
+The actual entry also imports header animation and reference vendor CSS in
+`components`. Both package styles are required. `base` retains the existing
+document baseline; `vendor` follows it so DevExtreme's compact typography stays
+unchanged. `utilities` can style native headings/links without fighting
+unlayered CSS. The theme's own entrypoint remains unchanged for other consumers.
+
+No Preflight, Tailwind config JS, CDN, v3 directives, or UI node_modules scan is
+used. UI styles are already compiled in their archive. Do not add a stock theme
+or duplicate package tokens. Corporate assets remain browser imports from
+`@smbc/devextreme-theme/assets`. This app has no charts or palette registration.
 
 `dx.smbc.css` is generated and must not be edited manually. ThemeBuilder
 metadata and the generated theme remain under source control.
@@ -268,8 +172,7 @@ website.
 - Myriad Pro is the default family for application text, navigation, controls,
   grids, and operational headings.
 - Local Myriad Pro files provide weights 300, 400, and 700.
-- Capitolium 2 Bold is reserved for `.app-display-title` and
-  `.app-display-heading`; this is the approved application display exception,
+- Capitolium 2 Bold is reserved for `font-brand` display headings; this is the approved application display exception,
   not a general-purpose second UI family.
 - Arial and Georgia remain fallbacks only.
 - Import `smbcLogoUrl` and `smbcFaviconUrl` from
@@ -373,7 +276,7 @@ Current header behaviour:
 - hides after scrolling down beyond its height;
 - returns on upward scroll, keyboard focus, or near the top of the page;
 - remains visible while the mobile menu is open;
-- collapses to a menu below 760px;
+- collapses to a menu below `md` (768px);
 - disables transitions for reduced-motion users.
 
 The header publishes `--sticky-header-offset` on `#main-content`. Sticky page
@@ -410,7 +313,7 @@ create a direct-import exception in this application.
 
 Shared overrides currently integrate typography, editors, buttons, selection
 controls, DataGrid/TreeList, pager, tabs, lists, overlays, calendar and progress.
-Optional dark sidebar helpers remain in application `smbc-shell.css`.
+Dark navigation uses semantic utilities; unused sidebar vendor helpers were removed.
 
 Important editor rules:
 
@@ -430,10 +333,10 @@ After any DevExtreme upgrade, regenerate the theme and review every section of
 ## 10. Application patterns
 
 Use `@smbc/ui` for cards, toolbars, filters, fields, badges, callouts, KPI
-blocks, empty states and table shells. Use `.app-*` for shell layout, page
-headers, grids, rows, stacks, detail lists, native table scrolling, page
-loading/error layouts, sticky action bars and typography. The global header
-and navigation remain application-owned semantic HTML.
+blocks, empty states and table shells. Use Tailwind utilities directly in JSX
+for shell layout, page headers, grids, flex composition, detail lists, scrolling,
+feedback arrangement and typography. The global header and navigation remain
+application-owned semantic HTML. See the README for a complete new-page example.
 
 Use `@smbc/ui` Button, editors, DataGrid, Tabs, Dialog, Toast and
 LoadingIndicator. Advanced grid and validation configuration use explicit UI
@@ -516,9 +419,13 @@ defect in the shared theme.
 
 ## 12. Responsive baseline
 
-Shared application styles currently use 1100px, 980px, and 760px breakpoints
-according to the owning layout. The reference page uses 1200px, 900px, and
-620px for its own layout.
+Use `sm` 640px, `md` 768px, `lg` 1024px and `xl` 1280px. These replace
+620/760/900/1100/1200px thresholds; the unused 980px review helper is removed.
+Header menu and wide Fields transition at `md`. Reference sidebar becomes
+horizontal below `lg`, leaving more content space from 901–1023px. Forms,
+swatches, KPIs and states use their widest layouts at `xl`, avoiding cramped
+columns between 1101/1201 and 1279px. Intermediate widths and 320px reflow are
+covered by production browser checks. No custom width breakpoint is needed.
 
 At narrow widths:
 
@@ -554,6 +461,7 @@ Run the project checks:
 npm run lint
 npm run typecheck
 npm run build
+npm run test:reference
 ```
 
 ## 14. Theme package ownership
@@ -566,7 +474,7 @@ and consumes its exports, including logo and favicon; there are
 no duplicate application-owned brand files. Package JS imports are side-effect
 free. This application does not render charts or register a chart palette.
 
-Global typography helpers, shell layouts, pages, navigation and reference demos
+Global document baseline, page composition, navigation and reference demos
 remain application responsibilities. Reusable components live in `../smbc-ui`. The theme package includes no React code.
 In `../devextreme-theme`, `npm run pack:check` verifies the runtime tarball
 contract and `npm test` verifies an installed tarball with Node and Vite.
@@ -580,7 +488,7 @@ compile the theme or depend on a source workspace.
 `../smbc-ui` is the separate `@smbc/ui@0.1.0` source project. The application
 installs its packed archive rather than using source aliases. Use its semantic
 props, React callbacks and compositional primitives. Do not recreate their
-private `smbc-ui-*` classes in the application. Reference-only layout classes
+private `smbc-ui-*` classes in the application. Additive application utilities
 may be passed via className. `Field` supplies label/help/error relationships;
 advanced DevExtreme rules remain available under `@smbc/ui/validation`.
 
@@ -740,8 +648,8 @@ to reproduce a legacy screen.
 Pilot on a representative form and grid. Theme CSS is global: a route-level
 pilot does not isolate other routes from its effects. During gradual migration,
 keep legacy UI styles scoped where possible and check adjacent screens for
-cascade collisions. Do not copy the reference header, navigation or `.ds-*`
-styles unless the application actually needs that composition.
+cascade collisions. Do not copy reference fixtures or complex header mechanics unless the
+application needs that composition; compose normal layout with utilities.
 
 ### 16.4 Convert components and adapt their contracts
 

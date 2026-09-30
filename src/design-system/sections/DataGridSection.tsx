@@ -119,26 +119,26 @@ export default function DataGridSection() {
 
       <TableShell>
         <div
-          className="app-table-scroll"
+          className="w-full overflow-x-auto overscroll-x-contain"
           role="region"
           aria-label="Payment summary: scroll horizontally on narrow screens"
           tabIndex={0}
         >
-          <table>
+          <table className="w-full min-w-[560px] border-collapse">
             <caption>Payment summary — native table</caption>
             <thead>
               <tr>
-                <th scope="col">Reference</th>
-                <th scope="col">Beneficiary</th>
-                <th scope="col">Status</th>
+                <th className="border-b-[length:var(--border-width-default)] border-border px-3 py-2 text-left align-top" scope="col">Reference</th>
+                <th className="border-b-[length:var(--border-width-default)] border-border px-3 py-2 text-left align-top" scope="col">Beneficiary</th>
+                <th className="border-b-[length:var(--border-width-default)] border-border px-3 py-2 text-left align-top" scope="col">Status</th>
               </tr>
             </thead>
             <tbody>
               {payments.slice(0, 3).map((payment) => (
                 <tr key={payment.id}>
-                  <td>{payment.reference}</td>
-                  <td>{payment.beneficiary}</td>
-                  <td>
+                  <td className="border-b-[length:var(--border-width-default)] border-border px-3 py-2 text-left align-top">{payment.reference}</td>
+                  <td className="border-b-[length:var(--border-width-default)] border-border px-3 py-2 text-left align-top">{payment.beneficiary}</td>
+                  <td className="border-b-[length:var(--border-width-default)] border-border px-3 py-2 text-left align-top">
                     <StatusCell value={payment.status} />
                   </td>
                 </tr>

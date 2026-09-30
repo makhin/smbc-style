@@ -9,47 +9,47 @@ export default function TypographySection() {
       description="Left-aligned sentence case with a consistent Myriad Pro application hierarchy."
     >
       <Card>
-        <Card.Body className="ds-type-stack">
+        <Card.Body className="flex flex-col gap-6">
           <div>
-            <span className="ds-type-meta">
+            <span className="mb-1 block text-xs text-fg-muted">
               Brand display · Capitolium 30 / 700
             </span>
-            <div className="app-display-title">A trusted partner</div>
-            <p className="app-caption">
+            <div className="font-brand text-3xl font-bold tracking-[-0.02em]">A trusted partner</div>
+            <p className="text-xs text-fg-muted">
               Capitolium is reserved for occasional brand display headings.
             </p>
           </div>
           <div>
-            <span className="ds-type-meta">
+            <span className="mb-1 block text-xs text-fg-muted">
               Application page title · Myriad Pro 24 / 600
             </span>
-            <div className="app-page-title">Payment review</div>
+            <div className="text-2xl leading-tight font-semibold">Payment review</div>
           </div>
           <div>
-            <span className="ds-type-meta">
+            <span className="mb-1 block text-xs text-fg-muted">
               Application section · Myriad Pro 20 / 600
             </span>
             <h2>Payment information</h2>
           </div>
           <div>
-            <span className="ds-type-meta">
+            <span className="mb-1 block text-xs text-fg-muted">
               Component title · Myriad Pro 16 / 600
             </span>
             <h3>Approval history</h3>
           </div>
           <div>
-            <span className="ds-type-meta">Standard UI · 14 / 400</span>
+            <span className="mb-1 block text-xs text-fg-muted">Standard UI · 14 / 400</span>
             <p>Standard application body text for operational information.</p>
           </div>
           <div>
-            <span className="ds-type-meta">Secondary</span>
-            <p className="app-muted">
+            <span className="mb-1 block text-xs text-fg-muted">Secondary</span>
+            <p className="text-fg-muted">
               Secondary information must remain clearly readable.
             </p>
           </div>
           <div>
-            <span className="ds-type-meta">Caption · 12 / 400</span>
-            <p className="app-caption">Last updated 27 Aug 2026, 14:32 CET</p>
+            <span className="mb-1 block text-xs text-fg-muted">Caption · 12 / 400</span>
+            <p className="text-xs text-fg-muted">Last updated 27 Aug 2026, 14:32 CET</p>
           </div>
           <Callout>
             <strong>Use sentence case</strong>

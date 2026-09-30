@@ -45,17 +45,17 @@ const spacingValues = [2, 4, 8, 12, 16, 20, 24, 32, 40, 48];
 
 function SwatchGrid({ swatches }: { swatches: readonly Swatch[] }) {
   return (
-    <div className="ds-swatch-grid">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {swatches.map(([name, token, value]) => (
-        <div className="ds-swatch" key={name}>
+        <div className="overflow-hidden rounded-card border-[length:var(--border-width-default)] border-border bg-surface" key={name}>
           <div
-            className="ds-swatch__color"
+            className="h-18 border-b-[length:var(--border-width-default)] border-border"
             style={{ background: `var(${token})` }}
           />
-          <div className="ds-swatch__meta">
-            <strong>{name}</strong>
-            <code>{value}</code>
-            <code>{token}</code>
+          <div className="flex flex-col gap-0.5 p-3">
+            <strong className="text-sm">{name}</strong>
+            <code className="text-xs text-fg-muted">{value}</code>
+            <code className="text-xs text-fg-muted">{token}</code>
           </div>
         </div>
       ))}
@@ -70,51 +70,51 @@ export default function FoundationsSection() {
       title="Foundations"
       description="Corporate colour, spacing, shape, and interface surface rules."
     >
-      <div className="ds-subsection">
+      <div className="mt-4 flex flex-col gap-4">
         <h3>Primary corporate colours</h3>
-        <p className="app-muted">
+        <p className="text-fg-muted">
           Traditional Green is dominant. Fresh Green is a restrained accent; the
           project keeps #C4D600 pending confirmation against the source PDF.
         </p>
         <SwatchGrid swatches={primarySwatches} />
       </div>
 
-      <div className="ds-subsection">
+      <div className="mt-4 flex flex-col gap-4">
         <h3>Traditional Green tints</h3>
         <SwatchGrid swatches={traditionalGreenTints} />
       </div>
 
-      <div className="ds-subsection">
+      <div className="mt-4 flex flex-col gap-4">
         <h3>Supplementary corporate colours</h3>
-        <p className="app-muted">
+        <p className="text-fg-muted">
           Use these only when a category or semantic role needs distinction;
           they are not decorative page colours.
         </p>
         <SwatchGrid swatches={supplementarySwatches} />
       </div>
 
-      <div className="ds-subsection">
+      <div className="mt-4 flex flex-col gap-4">
         <h3>Interface neutrals</h3>
         <SwatchGrid swatches={interfaceSwatches} />
       </div>
 
-      <div className="ds-subsection">
+      <div className="mt-4 flex flex-col gap-4">
         <h3>Spacing scale</h3>
-        <div className="ds-spacing-row">
+        <div className="flex flex-wrap items-end gap-3">
           {spacingValues.map((value) => (
-            <div className="ds-spacing-item" key={value}>
-              <div style={{ width: value, height: value }} />
-              <span>{value}px</span>
+            <div className="flex min-w-[54px] flex-col items-center gap-2" key={value}>
+              <div className="min-h-1 min-w-1 bg-primary" style={{ width: value, height: value }} />
+              <span className="text-xs text-fg-muted">{value}px</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="ds-subsection">
+      <div className="mt-4 flex flex-col gap-4">
         <h3>Shape</h3>
-        <div className="ds-control-row">
-          <div className="ds-shape ds-shape--control">3px control</div>
-          <div className="ds-shape ds-shape--card">6px card</div>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="grid min-h-14 w-32 place-items-center rounded-control border-[length:var(--border-width-default)] border-border-strong bg-surface">3px control</div>
+          <div className="grid min-h-14 w-32 place-items-center rounded-card border-[length:var(--border-width-default)] border-border-strong bg-surface">6px card</div>
           <StatusBadge tone="brand">Pill status</StatusBadge>
         </div>
       </div>

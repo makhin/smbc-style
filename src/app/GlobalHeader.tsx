@@ -3,8 +3,6 @@ import { NavLink } from 'react-router-dom';
 
 import { smbcLogoUrl } from '@smbc/devextreme-theme/assets';
 
-import './global-header.css';
-
 export default function GlobalHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -53,19 +51,19 @@ export default function GlobalHeader() {
 
   return (
     <header
-      className="global-header"
+      className="global-header sticky top-0 z-100 min-h-(--global-header-height) border-b-[length:var(--global-header-border-width)] border-header-border bg-header [--focus-ring-color:var(--focus-ring-color-on-dark)]"
       data-hidden={hidden}
       ref={headerRef}
       onFocus={() => setHidden(false)}
     >
-      <div className="global-header__inner">
-        <NavLink className="global-header__brand" to="/" aria-label="SMBC home">
-          <img src={smbcLogoUrl} alt="SMBC" width="146" height="42" />
-          <span>Application UI</span>
+      <div className="relative mx-auto flex min-h-[calc(var(--global-header-height)-var(--global-header-border-width))] w-full items-center justify-between px-4 py-4 md:py-5">
+        <NavLink className="inline-flex items-center gap-4 text-fg-inverse no-underline hover:no-underline" to="/" aria-label="SMBC home">
+          <img className="block h-auto w-28 md:h-[42px] md:w-[146px]" src={smbcLogoUrl} alt="SMBC" width="146" height="42" />
+          <span className="hidden border-l-[length:var(--border-width-default)] border-border-inverse pl-4 text-lg font-light tracking-[0.02em] text-nav-secondary md:block">Application UI</span>
         </NavLink>
 
         <button
-          className="global-header__menu-button"
+          className="global-header__menu-button block h-6 w-8 cursor-pointer border-0 bg-transparent p-0 md:hidden"
           type="button"
           aria-controls="global-navigation"
           aria-expanded={menuOpen}
@@ -82,15 +80,15 @@ export default function GlobalHeader() {
         </button>
 
         <nav
-          className="global-header__nav"
+          className={`global-header__nav absolute inset-x-0 top-full flex-col items-stretch gap-0 border-b-[length:var(--border-width-emphasis)] border-header-border bg-header px-4 pt-2 pb-4 md:static md:flex md:flex-row md:items-center md:gap-6 md:border-b-0 md:bg-transparent md:p-0 ${menuOpen ? 'flex' : 'hidden'}`}
           id="global-navigation"
           aria-label="Global navigation"
           data-open={menuOpen}
         >
-          <NavLink to="/design-system" onClick={() => setMenuOpen(false)}>
+          <NavLink className="relative py-3 text-lg font-light tracking-[0.02em] text-fg-inverse no-underline hover:no-underline md:py-2" to="/design-system" onClick={() => setMenuOpen(false)}>
             Design system
           </NavLink>
-          <span className="global-header__region">EMEA</span>
+          <span className="border-t-[length:var(--border-width-default)] border-border-inverse-subtle py-3 text-lg font-light tracking-[0.02em] text-fg-inverse md:border-t-0 md:border-l-[length:var(--border-width-default)] md:py-0 md:pl-6">EMEA</span>
         </nav>
       </div>
     </header>

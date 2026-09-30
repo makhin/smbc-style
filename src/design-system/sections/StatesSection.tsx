@@ -22,15 +22,15 @@ export default function StatesSection() {
 
   return (
     <Section id="states" title="Loading, empty & error states">
-      <div className="ds-state-grid">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <Card>
           <Card.Header>
             <Card.Title>Loading</Card.Title>
           </Card.Header>
-          <Card.Body className="ds-loading-demo" aria-busy={loadingDemo}>
+          <Card.Body className="flex min-h-45 items-center justify-center gap-3" aria-busy={loadingDemo}>
             {loadingDemo ? (
               <div
-                className="app-page-loading"
+                className="flex items-center gap-2"
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
@@ -56,7 +56,7 @@ export default function StatesSection() {
             <Card.Title>Error</Card.Title>
           </Card.Header>
           <Card.Body>
-            <Callout className="app-page-error" tone="danger" role="alert">
+            <Callout className="flex flex-col items-start gap-2" tone="danger" role="alert">
               <strong>Unable to load payment history</strong>
               <span>Try again. If the problem continues, contact support.</span>
             </Callout>
