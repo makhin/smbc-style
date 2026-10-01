@@ -68,6 +68,9 @@ Review these dependency file changes together with your source changes.
 The clean script installs theme dependencies with `npm ci --include=dev`, packs
 the theme, refreshes UI's local archive reference before its clean install,
 packs UI, then refreshes both application references before its clean install.
+`package-lock.json` is optional at startup: if missing, the clean script creates
+it with `npm install --package-lock-only` before running `npm ci`. Without an
+existing lockfile, dependency versions are resolved from `package.json`.
 The update script reuses installed dependencies and reinstalls the selected
 archives without running `npm ci`. If external dependencies or lockfiles changed,
 use the clean script. `-Update Ui` requires the previously installed theme archive

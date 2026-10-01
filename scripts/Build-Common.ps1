@@ -35,10 +35,12 @@ function New-ProjectArchive {
 function Install-ProjectDependencies {
     param([string] $Project, [string[]] $LocalPackages = @(), [string] $SaveFlag = '--save-prod')
 
-    if ($LocalPackages.Count -gt 0) {
+    $lockfile = Join-Path $Project 'package-lock.json'
+    if ($LocalPackages.Count -gt 0 -or -not (Test-Path -LiteralPath $lockfile -PathType Leaf)) {
         # A newly built same-version archive has a new integrity hash. Refresh
         # the manifest/lock before ci; ci alone would reject the old integrity.
-        Invoke-ProjectNpm $Project (@('install', '--package-lock-only', '--ignore-scripts', '--include=dev', $SaveFlag) + $LocalPackages)
+        # Also creates a lockfile for a checkout that does not have one yet.
+        Invoke-ProjectNpm $Project (@('install', '--package-lock-only', '--package-lock=true', '--ignore-scripts', '--include=dev', $SaveFlag) + $LocalPackages)
     }
     # ci replaces node_modules and installs exactly the refreshed lockfile.
     Invoke-ProjectNpm $Project @('ci', '--include=dev')
@@ -60,10 +62,8 @@ function Invoke-SmbcBuild {
     $ui = Join-Path '.' 'smbc-ui'
     $app = Join-Path '.' 'smbc-style'
     foreach ($project in @($theme, $ui, $app)) {
-        foreach ($file in @('package.json', 'package-lock.json')) {
-            if (-not (Test-Path -LiteralPath (Join-Path $project $file) -PathType Leaf)) {
-                throw "Missing '$file' in '$project'. All three repositories must be sibling directories."
-            }
+        if (-not (Test-Path -LiteralPath (Join-Path $project 'package.json') -PathType Leaf)) {
+            throw "Missing 'package.json' in '$project'. All three repositories must be sibling directories."
         }
         if (-not $Clean -and -not (Test-Path -LiteralPath (Join-Path $project 'node_modules') -PathType Container)) {
             throw "Dependencies are missing in '$project'. Run Build-Clean.ps1 first."
