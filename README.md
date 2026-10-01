@@ -26,6 +26,46 @@ npm run build
 
 Application builds use the installed theme and do not regenerate it.
 
+### PowerShell: build all three local projects
+
+Requires Node.js 22.12+ and npm 10+, Windows PowerShell 5.1 or PowerShell 7.
+Keep `devextreme-theme`, `smbc-ui` and `smbc-style` in the same parent directory.
+Run from `smbc-style`:
+
+```powershell
+# First installation, or replace node_modules in all three projects:
+.\scripts\Build-Clean.ps1
+
+# Dependencies already installed; rebuild both local packages and the app:
+.\scripts\Build-Updated.ps1
+
+# Only UI changed:
+.\scripts\Build-Updated.ps1 -Update Ui
+
+# Theme changed (also rebuilds UI against its updated CSS bridge):
+.\scripts\Build-Updated.ps1 -Update Theme
+```
+
+Both scripts finish with app lint and a production build in `smbc-style/dist`.
+They stop on the first failed command and restore the caller's working directory.
+`npm pack` builds the libraries through their existing `prepack` hooks; archive
+names follow each package's current version. Local installs refresh the manifest
+and lockfile, including integrity when the package version stays unchanged.
+Review these dependency file changes together with your source changes.
+
+The clean script installs theme dependencies with `npm ci --include=dev`, packs
+the theme, refreshes UI's local archive reference before its clean install,
+packs UI, then refreshes both application references before its clean install.
+The update script reuses installed dependencies and reinstalls the selected
+archives without running `npm ci`. If external dependencies or lockfiles changed,
+use the clean script. `-Update Ui` requires the previously installed theme archive
+to remain available at the location recorded in the dependency files.
+
+Paths are resolved from the script location, so invocation also works from other
+directories. Override the common parent with `-ProjectsRoot 'C:\work\SMBC'`.
+These scripts build without browser tests; for the complete package and browser
+validation workflow, use `npm run refresh:packages` as described below.
+
 ## Updating local packages
 
 With all three repositories checked out as sibling directories, run:
