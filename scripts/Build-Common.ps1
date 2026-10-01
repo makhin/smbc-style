@@ -28,7 +28,8 @@ function New-ProjectArchive {
     if (-not (Test-Path -LiteralPath $archive -PathType Leaf)) {
         throw "npm pack did not create '$archive'."
     }
-    return $archive
+    # npm runs inside a sibling consumer, so its archive path starts with .. .
+    return Join-Path (Join-Path '..' (Split-Path $Project -Leaf)) $filename
 }
 
 function Install-ProjectDependencies {
@@ -44,7 +45,7 @@ function Install-ProjectDependencies {
 }
 
 function Invoke-SmbcBuild {
-    param([string] $ProjectsRoot, [switch] $Clean, [string] $Update = 'All')
+    param([switch] $Clean, [string] $Update = 'All')
 
     $npmCommand = Get-Command npm.cmd -ErrorAction SilentlyContinue
     if (-not $npmCommand) { $npmCommand = Get-Command npm -ErrorAction Stop }
@@ -55,10 +56,9 @@ function Invoke-SmbcBuild {
     $nodeVersion = [version] ($nodeVersionText.Trim() -replace '^v', '')
     if ($nodeVersion -lt [version] '22.12.0') { throw 'Node.js 22.12 or newer is required.' }
 
-    $root = (Resolve-Path -LiteralPath $ProjectsRoot).Path
-    $theme = Join-Path $root 'devextreme-theme'
-    $ui = Join-Path $root 'smbc-ui'
-    $app = Join-Path $root 'smbc-style'
+    $theme = Join-Path '.' 'devextreme-theme'
+    $ui = Join-Path '.' 'smbc-ui'
+    $app = Join-Path '.' 'smbc-style'
     foreach ($project in @($theme, $ui, $app)) {
         foreach ($file in @('package.json', 'package-lock.json')) {
             if (-not (Test-Path -LiteralPath (Join-Path $project $file) -PathType Leaf)) {

@@ -29,21 +29,33 @@ Application builds use the installed theme and do not regenerate it.
 ### PowerShell: build all three local projects
 
 Requires Node.js 22.12+ and npm 10+, Windows PowerShell 5.1 or PowerShell 7.
-Keep `devextreme-theme`, `smbc-ui` and `smbc-style` in the same parent directory.
-Run from `smbc-style`:
+Copy `scripts/Build-Clean.ps1`, `scripts/Build-Updated.ps1` and
+`scripts/Build-Common.ps1` into the common parent directory of the three projects:
+
+```text
+SMBC/
+  Build-Clean.ps1
+  Build-Updated.ps1
+  Build-Common.ps1
+  devextreme-theme/
+  smbc-ui/
+  smbc-style/
+```
+
+Run from this parent directory:
 
 ```powershell
 # First installation, or replace node_modules in all three projects:
-.\scripts\Build-Clean.ps1
+.\Build-Clean.ps1
 
 # Dependencies already installed; rebuild both local packages and the app:
-.\scripts\Build-Updated.ps1
+.\Build-Updated.ps1
 
 # Only UI changed:
-.\scripts\Build-Updated.ps1 -Update Ui
+.\Build-Updated.ps1 -Update Ui
 
 # Theme changed (also rebuilds UI against its updated CSS bridge):
-.\scripts\Build-Updated.ps1 -Update Theme
+.\Build-Updated.ps1 -Update Theme
 ```
 
 Both scripts finish with app lint and a production build in `smbc-style/dist`.
@@ -61,8 +73,10 @@ archives without running `npm ci`. If external dependencies or lockfiles changed
 use the clean script. `-Update Ui` requires the previously installed theme archive
 to remain available at the location recorded in the dependency files.
 
-Paths are resolved from the script location, so invocation also works from other
-directories. Override the common parent with `-ProjectsRoot 'C:\work\SMBC'`.
+The scripts temporarily switch to their own directory and use relative project
+paths (`./devextreme-theme`, `./smbc-ui`, `./smbc-style`) and sibling archive paths
+(`../devextreme-theme/*.tgz`, `../smbc-ui/*.tgz`). Invocation also works from other
+directories, and the caller's working directory is restored on success or failure.
 These scripts build without browser tests; for the complete package and browser
 validation workflow, use `npm run refresh:packages` as described below.
 
