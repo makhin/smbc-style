@@ -83,6 +83,34 @@ directories, and the caller's working directory is restored on success or failur
 These scripts build without browser tests; for the complete package and browser
 validation workflow, use `npm run refresh:packages` as described below.
 
+### macOS: build all three local projects
+
+Requires Node.js 22.12+ and npm 10+. The scripts work with macOS's built-in Bash.
+Copy `scripts/Build-Clean.sh`, `scripts/Build-Updated.sh` and
+`scripts/Build-Common.sh` into the common parent directory of the three projects,
+just like the PowerShell scripts above. Then run:
+
+```bash
+chmod +x Build-Clean.sh Build-Updated.sh
+
+# First installation, or replace node_modules in all three projects:
+./Build-Clean.sh
+
+# Rebuild both local packages and the app using installed dependencies:
+./Build-Updated.sh
+
+# Only UI changed:
+./Build-Updated.sh --update Ui
+
+# Theme changed (also rebuilds UI):
+./Build-Updated.sh --update Theme
+```
+
+The clean/update behavior, archive handling and final lint/build steps match the
+PowerShell scripts. They stop on failure and can be invoked from any directory;
+the caller's working directory is preserved because each script runs in its own
+process. Run them with `./` or `bash`, rather than sourcing them.
+
 ## Updating local packages
 
 With all three repositories checked out as sibling directories, run:
