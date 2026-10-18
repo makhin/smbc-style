@@ -18,6 +18,7 @@ import {
   Validator,
 } from '@smbc/ui/validation';
 
+import IntegrationExamples from '../components/IntegrationExamples';
 import Section from '../components/Section';
 import formOptions from '../data/form-options.json';
 
@@ -61,6 +62,9 @@ export default function ComponentsSection() {
       title="More DevExtreme components"
       description="A small set of common application patterns beyond the basic form controls."
     >
+      <Card className="min-w-0"><Card.Header><Card.Title>Drawer, progress and server grid integration</Card.Title></Card.Header>
+        <Card.Body><IntegrationExamples /></Card.Body>
+      </Card>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Card className="col-span-full min-w-0">
           <Card.Header>
