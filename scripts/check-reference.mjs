@@ -183,9 +183,70 @@ try {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   assert.equal(await page.locator('.global-header').evaluate((el) => getComputedStyle(el).transitionDuration), '0s');
   assert.equal(await page.locator('html').evaluate((el) => getComputedStyle(el).scrollBehavior), 'auto');
+  // Independent progress examples: controlled stages and percentage completion.
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await load();
+    const steps = page.locator('#stepper-example');
+    await reveal('#stepper-example');
+    assert.equal(await steps.locator('.dx-step').count(), 3);
+    assert((await steps.locator('.dx-stepper').boundingBox()).width <= 576);
+    assert(await steps.getByRole('button', { name: 'Previous step', exact: true }).isDisabled());
+    assert(await steps.getByRole('button', { name: 'Reset steps', exact: true }).isDisabled());
+    await steps.locator('.dx-step').last().click();
+    assert.equal(await steps.locator('.dx-step-selected .dx-step-label').textContent(), 'Created');
+    for (const label of ['In review', 'Approved']) {
+      await steps.getByRole('button', { name: 'Next step', exact: true }).click();
+      await page.waitForFunction(expected => document.querySelector('#stepper-example .dx-step-selected .dx-step-label')?.textContent === expected, label);
+    }
+    assert(await steps.getByRole('button', { name: 'Next step', exact: true }).isDisabled());
+    await steps.getByRole('button', { name: 'Previous step', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('#stepper-example .dx-step-selected .dx-step-label')?.textContent === 'In review');
+    await page.waitForFunction(() => Math.abs(parseFloat(getComputedStyle(document.querySelector('#stepper-example .dx-stepper-connector-value')).flexGrow) - 0.5) < 0.01);
+    await steps.screenshot({ path: new URL(`stepper-${width}.png`, output).pathname });
+    await steps.getByRole('button', { name: 'Reset steps', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('#stepper-example .dx-step-selected .dx-step-label')?.textContent === 'Created');
+
+    const example = page.locator('#progressbar-example');
+    const progress = example.getByRole('progressbar', { name: 'Batch processing progress' });
+    await reveal('#progressbar-example');
+    assert.equal(await progress.getAttribute('aria-valuenow'), '0');
+    assert.equal(await progress.getAttribute('aria-valuemin'), '0');
+    assert.equal(await progress.getAttribute('aria-valuemax'), '100');
+    assert(await example.getByRole('button', { name: 'Reset progress', exact: true }).isDisabled());
+    for (const value of [25, 50, 75, 100]) {
+      await example.getByRole('button', { name: 'Advance by 25%', exact: true }).click();
+      await page.waitForFunction(expected => document.querySelector('#progressbar-example [role="progressbar"]')?.getAttribute('aria-valuenow') === String(expected), value);
+      await page.waitForFunction(expected => {
+        const range = document.querySelector('#progressbar-example .dx-progressbar-range').getBoundingClientRect();
+        const track = document.querySelector('#progressbar-example .dx-progressbar-container').getBoundingClientRect();
+        return Math.abs(range.width / track.width - expected / 100) < 0.01;
+      }, value);
+      if (value === 50) {
+        await example.screenshot({ path: new URL(`progressbar-${width}.png`, output).pathname });
+      }
+    }
+    assert.equal(await example.getByRole('status').textContent(), 'Batch complete.');
+    assert(await example.getByRole('button', { name: 'Advance by 25%', exact: true }).isDisabled());
+    await example.getByRole('button', { name: 'Reset progress', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('#progressbar-example [role="progressbar"]')?.getAttribute('aria-valuenow') === '0');
+    assert.equal(await example.getByRole('status').textContent(), 'Ready to process.');
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Progress examples overflow at ${width}px`);
+  }
+  await reveal('#drawer-example');
+  await page.getByRole('button', { name: 'Focus trigger', exact: true }).click();
+  assert(await page.getByRole('button', { name: 'Open panel', exact: true }).evaluate(el => el === document.activeElement));
+  await page.getByRole('button', { name: 'Open panel', exact: true }).click();
+  await page.getByRole('button', { name: 'Close panel', exact: true }).click();
+  await reveal('#remote-grid-example');
+  await page.locator('#remote-grid .dx-data-row').getByText('A', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Filter remote', exact: true }).click();
+  await page.locator('#remote-grid .dx-data-row').getByText('B', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Refresh remote', exact: true }).click();
+  await page.locator('#remote-grid .dx-data-row').getByText('B', { exact: true }).waitFor();
   assert.deepEqual(errors, []);
   assert.deepEqual(requests, []);
-  console.log('PASS: production reference, 14 responsive widths, semantic tokens, typography, forms, validation/focus, filters, Toolbar, DataGrid, dialog/toast/loading, header, mobile, reduced motion.');
+  console.log('PASS: production reference, 14 responsive widths, semantic tokens, typography, forms, validation/focus, filters, Toolbar, DataGrid, dialog/toast/loading, header, mobile, reduced motion, Stepper, ProgressBar, Drawer and remote integration.');
   console.log(`Screenshots: ${output.pathname}`);
 } finally {
   await browser.close();

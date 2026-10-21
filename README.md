@@ -312,3 +312,11 @@ adapter, UI and app. The base archive is `../smbc-theme/smbc-theme-0.1.0.tgz`;
 install it alongside the adapter archive (with `--save-dev` in UI).
 `Build-Updated` mode `Theme` rebuilds both themes and consumers; mode `Ui` uses
 installed themes. `Build-Clean` and `refresh:packages` cover the complete chain.
+
+## Progress examples
+
+The component reference separates Stepper, ProgressBar, Drawer and remote-grid
+integration into individual cards. Stepper demonstrates Created → In review →
+Approved with previous, next and reset actions. ProgressBar advances by 25%
+from 0 to 100 and can be reset. Boundary actions are disabled. Both progress
+examples use `@smbc/ui` and are checked at desktop, 390px and 320px widths.
