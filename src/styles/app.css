@@ -8,7 +8,7 @@
 @import "../app/global-header.css" layer(components);
 @import "./reference-vendor.css" layer(components);
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
-@reference "@smbc/devextreme-theme/tailwind.css";
+@reference "@smbc/theme/tailwind.css";
 @source "..";
 
 /* Existing application baseline, not Tailwind Preflight. In a layer so

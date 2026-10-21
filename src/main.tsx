@@ -1,5 +1,5 @@
 import './styles/app.css';
-import { smbcFaviconUrl } from '@smbc/devextreme-theme/assets';
+import { smbcFaviconUrl } from '@smbc/theme/assets';
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

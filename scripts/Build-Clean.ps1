@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-Installs all three sibling projects from scratch and builds smbc-style.
+Installs all four sibling projects from scratch and builds smbc-style.
 .EXAMPLE
 .\Build-Clean.ps1
 #>

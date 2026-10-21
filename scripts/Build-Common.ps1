@@ -58,12 +58,13 @@ function Invoke-SmbcBuild {
     $nodeVersion = [version] ($nodeVersionText.Trim() -replace '^v', '')
     if ($nodeVersion -lt [version] '22.12.0') { throw 'Node.js 22.12 or newer is required.' }
 
-    $theme = Join-Path '.' 'devextreme-theme'
+    $base = Join-Path '.' 'smbc-theme'
+    $theme = Join-Path '.' 'smbc-devextreme-theme'
     $ui = Join-Path '.' 'smbc-ui'
     $app = Join-Path '.' 'smbc-style'
-    foreach ($project in @($theme, $ui, $app)) {
+    foreach ($project in @($base, $theme, $ui, $app)) {
         if (-not (Test-Path -LiteralPath (Join-Path $project 'package.json') -PathType Leaf)) {
-            throw "Missing 'package.json' in '$project'. All three repositories must be sibling directories."
+            throw "Missing 'package.json' in '$project'. All four repositories must be sibling directories."
         }
         if (-not $Clean -and -not (Test-Path -LiteralPath (Join-Path $project 'node_modules') -PathType Container)) {
             throw "Dependencies are missing in '$project'. Run Build-Clean.ps1 first."
@@ -72,16 +73,23 @@ function Invoke-SmbcBuild {
 
     $archives = @()
     if ($Clean -or $Update -ne 'Ui') {
-        if ($Clean) { Install-ProjectDependencies $theme }
+        if ($Clean) { Install-ProjectDependencies $base }
+        $baseArchive = New-ProjectArchive $base
+        if ($Clean) {
+            Install-ProjectDependencies $theme @($baseArchive) '--save-dev'
+        }
+        else {
+            Invoke-ProjectNpm $theme @('install', '--include=dev', '--save-dev', $baseArchive)
+        }
         $themeArchive = New-ProjectArchive $theme
         if ($Clean) {
-            Install-ProjectDependencies $ui @($themeArchive) '--save-dev'
+            Install-ProjectDependencies $ui @($baseArchive, $themeArchive) '--save-dev'
         }
         else {
             # Keep the registry peer range; only the UI devDependency is local.
-            Invoke-ProjectNpm $ui @('install', '--include=dev', '--save-dev', $themeArchive)
+            Invoke-ProjectNpm $ui @('install', '--include=dev', '--save-dev', $baseArchive, $themeArchive)
         }
-        $archives += $themeArchive
+        $archives += @($baseArchive, $themeArchive)
     }
 
     # Theme updates also rebuild UI: Tailwind compiles against the theme bridge.

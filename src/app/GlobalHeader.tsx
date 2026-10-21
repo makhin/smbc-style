@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { smbcLogoUrl } from '@smbc/devextreme-theme/assets';
+import { smbcLogoUrl } from '@smbc/theme/assets';
 
 export default function GlobalHeader() {
   const [menuOpen, setMenuOpen] = useState(false);

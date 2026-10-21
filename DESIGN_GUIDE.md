@@ -7,7 +7,7 @@
 
 ## 1. Purpose
 
-This project consumes `@smbc/devextreme-theme` and `@smbc/ui` and provides
+This project consumes `@smbc/theme`, `@smbc/devextreme-theme` and `@smbc/ui` and provides
 the application shell and development reference page. The reusable theme and
 components are maintained in separate sibling projects. The reference translates
 the restrained SMBC EMEA visual language into a compact, accessible interface
@@ -24,9 +24,9 @@ widget implementation behind the shared `@smbc/ui` API.
 Use this order when implementation details conflict:
 
 1. Approved internal SMBC standards.
-2. `../devextreme-theme/src/tokens.css` for reusable visual values.
+2. `../smbc-theme/src/tokens.css` for reusable visual values.
 3. Reusable components in `../smbc-ui`, application composition in JSX, and DevExtreme overrides in
-   `../devextreme-theme/src/overrides.css`.
+   `../smbc-devextreme-theme/src/overrides.css`.
 4. `/design-system` for rendered states and regression review.
 5. Page-specific styles only for local layout constraints.
 
@@ -55,12 +55,13 @@ src/
     app.css           # sole CSS entry, layers, sources, document baseline
     reference-vendor.css # explicit reference-only vendor contexts
 scripts/check-reference.mjs # production browser checks and screenshots
-../devextreme-theme/
+../smbc-theme/
   src/tokens.css      # canonical design values
   src/tailwind.css    # compile-time aliases only, @theme inline
+  assets/            # fonts, logo, favicon
+../smbc-devextreme-theme/
   src/dx.smbc.css     # generated; never edit manually
   src/overrides.css   # shared corporate DevExtreme corrections
-  assets/            # fonts, logo, favicon
 ../smbc-ui/
   src/components/    # semantic controls; ui: prefixed utilities in JSX
   src/styles/styles.css # Tailwind v4 CLI entry, no Preflight
@@ -72,7 +73,8 @@ scripts/check-reference.mjs # production browser checks and screenshots
 
 | Owner | Responsibility |
 | --- | --- |
-| `@smbc/devextreme-theme` | Tokens, assets, fonts, corporate DevExtreme theme/overrides, semantic Tailwind bridge |
+| `@smbc/theme` | Tokens, assets, fonts, semantic Tailwind bridge |
+| `@smbc/devextreme-theme` | DevExtreme theme/overrides, icons and chart palette registration |
 | `@smbc/ui` | Semantic components, accessibility, typed vendor configuration, self-contained compiled component styles |
 | Application JSX | Routing, page composition, grid/flex, spacing, responsive behaviour, utility typography and local decoration |
 | Application CSS | Document baseline and complex local interactions; no parallel layout helper system |
@@ -135,7 +137,7 @@ import './styles/app.css';
 @import "@smbc/devextreme-theme/styles.css" layer(vendor);
 @import "@smbc/ui/styles.css" layer(components);
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
-@reference "@smbc/devextreme-theme/tailwind.css";
+@reference "@smbc/theme/tailwind.css";
 @source "..";
 ```
 
@@ -148,7 +150,7 @@ unlayered CSS. The theme's own entrypoint remains unchanged for other consumers.
 No Preflight, Tailwind config JS, CDN, v3 directives, or UI node_modules scan is
 used. UI styles are already compiled in their archive. Do not add a stock theme
 or duplicate package tokens. Corporate assets remain browser imports from
-`@smbc/devextreme-theme/assets`. This app has no charts or palette registration.
+`@smbc/theme/assets`. This app has no charts or palette registration.
 
 `dx.smbc.css` is generated and must not be edited manually. ThemeBuilder
 metadata and the generated theme remain under source control.
@@ -156,13 +158,13 @@ metadata and the generated theme remain under source control.
 When a mapped token or ThemeBuilder setting changes, run:
 
 ```bash
-npm --prefix ../devextreme-theme run theme:build
+npm run refresh:packages
 ```
 
-This synchronises metadata from `../devextreme-theme/src/tokens.css` before regenerating the
-theme. The `devextreme` and `devextreme-themebuilder` versions must remain
-compatible. Regeneration updates package source only: run `npm pack` in that
-project and reinstall its archive here to update the reference application.
+This packs the base theme, installs it in the adapter, synchronises metadata
+from the installed `@smbc/theme/tokens.css` export, then rebuilds and validates
+the adapter, UI and application. The `devextreme` and `devextreme-themebuilder`
+versions must remain compatible. No build reads a sibling source file.
 
 ## 5. Typography and local assets
 
@@ -176,7 +178,7 @@ website.
   not a general-purpose second UI family.
 - Arial and Georgia remain fallbacks only.
 - Import `smbcLogoUrl` and `smbcFaviconUrl` from
-  `@smbc/devextreme-theme/assets`; do not redraw or remotely embed them.
+  `@smbc/theme/assets`; do not redraw or remotely embed them.
 - Align body text left and use sentence case for headings and labels. Do not
   force uppercase navigation labels or eyebrow text.
 - Trajan is not an application font and is reserved for the company name or
@@ -466,22 +468,18 @@ npm run test:reference
 
 ## 14. Theme package ownership
 
-The canonical theme source is the standalone `../devextreme-theme` project. Its runtime
-exports and internal-registry instructions are documented in
-[`../devextreme-theme/README.md`](../devextreme-theme/README.md).
-The demo installs `@smbc/devextreme-theme` from a local versioned `.tgz` archive
-and consumes its exports, including logo and favicon; there are
-no duplicate application-owned brand files. Package JS imports are side-effect
-free. This application does not render charts or register a chart palette.
+The canonical tokens and corporate assets live in `../smbc-theme`; the DevExtreme
+adapter lives in `../smbc-devextreme-theme`. Their READMEs document public exports
+and internal-registry requirements. The demo installs both as versioned `.tgz`
+archives. Logo/favicon come from `@smbc/theme/assets`; there are no application-owned
+copies. Package JS imports do not access the DOM or register palettes.
 
-Global document baseline, page composition, navigation and reference demos
-remain application responsibilities. Reusable components live in `../smbc-ui`. The theme package includes no React code.
-In `../devextreme-theme`, `npm run pack:check` verifies the runtime tarball
-contract and `npm test` verifies an installed tarball with Node and Vite.
-Run `npm pack` there and reinstall the generated archive in this application
-after changing the theme. See the application README for the update workflow.
-Application `dev`, `typecheck` and `build` use the installed archive; they do not
-compile the theme or depend on a source workspace.
+Neither theme contains React code. Global document baseline, layout, navigation
+and demos remain application responsibilities; reusable components live in
+`../smbc-ui`. Each theme's `npm run check` validates package contents and an
+installed tarball with Node and Vite. Application dev/typecheck/build use installed
+archives and do not compile theme sources. Use `npm run refresh:packages` to
+rebuild the entire chain after changes.
 
 ## 15. Component library ownership
 
@@ -599,26 +597,19 @@ If the approved releases are available in your internal registry, configure the
 `@smbc` scope there and install the compatible set:
 
 ```bash
-npm install @smbc/devextreme-theme@0.1.0 @smbc/ui@0.1.0 devextreme@26.1.4 devextreme-react@26.1.4 react@19.2.8 react-dom@19.2.8
+npm install @smbc/theme@0.1.0 @smbc/devextreme-theme@0.2.0 @smbc/ui@0.2.0 devextreme@26.1.4 devextreme-react@26.1.4 react@19.2.8 react-dom@19.2.8
 ```
 
-For sibling-project development, build the theme archive first, then the UI
-archive, and explicitly install both in the consumer:
+For sibling development, use the four-project workflow from `smbc-style`:
 
 ```bash
-# From smbc-style; theme dependencies must already be installed.
-cd ../devextreme-theme
-npm run check
-npm pack
-cd ../smbc-ui
-npm ci --include=dev
 # First browser setup only:
 npx playwright install chromium
-npm run check
-npm pack
-cd ../smbc-style
-npm install ../devextreme-theme/smbc-devextreme-theme-0.1.0.tgz ../smbc-ui/smbc-ui-0.1.0.tgz
+npm run refresh:packages
 ```
+
+It builds and packs base theme → adapter → UI, installs all three archives in
+this application, and runs package and browser checks.
 
 For another application, substitute its directory and archive paths. Use
 installed packages, not aliases into sibling `src` or `dist`. Repack and reinstall

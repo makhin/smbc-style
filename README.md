@@ -1,19 +1,20 @@
 # SMBC Application UI
 
 React application shell and design-system reference consuming
-`@smbc/devextreme-theme` and `@smbc/ui`. The implementation standard and UI rules live in
+`@smbc/theme`, `@smbc/devextreme-theme` and `@smbc/ui`. The implementation standard and UI rules live in
 [`DESIGN_GUIDE.md`](DESIGN_GUIDE.md).
 
 ## Installation and commands
 
-The theme is installed from the local archive
-`../devextreme-theme/smbc-devextreme-theme-0.1.0.tgz`, recorded in `package.json`
+The base theme is installed from `../smbc-theme/smbc-theme-0.1.0.tgz`.
+The DevExtreme adapter is installed from the local archive
+`../smbc-devextreme-theme/smbc-devextreme-theme-0.2.0.tgz`, recorded in `package.json`
 and `package-lock.json`. Ensure this archive exists next to the application
 before installing dependencies. npm extracts it into `node_modules`; there is
 no workspace or symlink to the theme's source project.
 
 The UI package is installed from
-`../smbc-ui/smbc-ui-0.1.0.tgz`; this sibling archive must also exist for `npm ci`.
+`../smbc-ui/smbc-ui-0.2.0.tgz`; this sibling archive must also exist for `npm ci`.
 Its source and API documentation live in [smbc-ui](../smbc-ui/README.md).
 
 ```bash
@@ -26,18 +27,19 @@ npm run build
 
 Application builds use the installed theme and do not regenerate it.
 
-### PowerShell: build all three local projects
+### PowerShell: build all four local projects
 
 Requires Node.js 22.12+ and npm 10+, Windows PowerShell 5.1 or PowerShell 7.
 Copy `scripts/Build-Clean.ps1`, `scripts/Build-Updated.ps1` and
-`scripts/Build-Common.ps1` into the common parent directory of the three projects:
+`scripts/Build-Common.ps1` into the common parent directory of the four projects:
 
 ```text
 SMBC/
   Build-Clean.ps1
   Build-Updated.ps1
   Build-Common.ps1
-  devextreme-theme/
+  smbc-theme/
+  smbc-devextreme-theme/
   smbc-ui/
   smbc-style/
 ```
@@ -45,10 +47,10 @@ SMBC/
 Run from this parent directory:
 
 ```powershell
-# First installation, or replace node_modules in all three projects:
+# First installation, or replace node_modules in all four projects:
 .\Build-Clean.ps1
 
-# Dependencies already installed; rebuild both local packages and the app:
+# Dependencies already installed; rebuild all three library packages and the app:
 .\Build-Updated.ps1
 
 # Only UI changed:
@@ -65,9 +67,10 @@ names follow each package's current version. Local installs refresh the manifest
 and lockfile, including integrity when the package version stays unchanged.
 Review these dependency file changes together with your source changes.
 
-The clean script installs theme dependencies with `npm ci --include=dev`, packs
-the theme, refreshes UI's local archive reference before its clean install,
-packs UI, then refreshes both application references before its clean install.
+The clean script installs and packs the base theme, installs that archive in
+the adapter and packs it, installs both themes in UI and packs UI, then installs
+all three archives in the application. Each project uses `npm ci --include=dev`
+after refreshing its local archive references.
 `package-lock.json` is optional at startup: if missing, the clean script creates
 it with `npm install --package-lock-only` before running `npm ci`. Without an
 existing lockfile, dependency versions are resolved from `package.json`.
@@ -77,26 +80,26 @@ use the clean script. `-Update Ui` requires the previously installed theme archi
 to remain available at the location recorded in the dependency files.
 
 The scripts temporarily switch to their own directory and use relative project
-paths (`./devextreme-theme`, `./smbc-ui`, `./smbc-style`) and sibling archive paths
-(`../devextreme-theme/*.tgz`, `../smbc-ui/*.tgz`). Invocation also works from other
+paths (`./smbc-theme`, `./smbc-devextreme-theme`, `./smbc-ui`, `./smbc-style`) and sibling archive paths
+(`../smbc-theme/*.tgz`, `../smbc-devextreme-theme/*.tgz`, `../smbc-ui/*.tgz`). Invocation also works from other
 directories, and the caller's working directory is restored on success or failure.
 These scripts build without browser tests; for the complete package and browser
 validation workflow, use `npm run refresh:packages` as described below.
 
-### macOS: build all three local projects
+### macOS: build all four local projects
 
 Requires Node.js 22.12+ and npm 10+. The scripts work with macOS's built-in Bash.
 Copy `scripts/Build-Clean.sh`, `scripts/Build-Updated.sh` and
-`scripts/Build-Common.sh` into the common parent directory of the three projects,
+`scripts/Build-Common.sh` into the common parent directory of the four projects,
 just like the PowerShell scripts above. Then run:
 
 ```bash
 chmod +x Build-Clean.sh Build-Updated.sh
 
-# First installation, or replace node_modules in all three projects:
+# First installation, or replace node_modules in all four projects:
 ./Build-Clean.sh
 
-# Rebuild both local packages and the app using installed dependencies:
+# Rebuild all three library packages and the app using installed dependencies:
 ./Build-Updated.sh
 
 # Only UI changed:
@@ -113,14 +116,14 @@ process. Run them with `./` or `bash`, rather than sourcing them.
 
 ## Updating local packages
 
-With all three repositories checked out as sibling directories, run:
+With all four repositories checked out as sibling directories, run:
 
 ```sh
 npm run refresh:packages
 ```
 
-The command installs and checks the theme, packs its checked output, reinstalls
-that archive in UI, checks and packs UI, and installs both archives here. It then
+The command installs, checks and packs the base theme, then the adapter against
+that base archive, then UI against both themes, and installs all three archives here. It then
 runs a clean install, lint, typecheck and the production browser suite. Install
 Chromium once with `npx playwright install chromium` before the first run.
 Failures stop the sequence. Same-version tarball integrity is refreshed in the
@@ -231,19 +234,19 @@ Screenshots are written to ignored `artifacts/reference/` for visual review.
 
 ```ts
 import '@smbc/devextreme-theme/styles.css';
-import { smbcLogoUrl, smbcFaviconUrl } from '@smbc/devextreme-theme/assets';
+import { smbcLogoUrl, smbcFaviconUrl } from '@smbc/theme/assets';
 ```
 
-The package owns the canonical theme, semantic tokens, corporate fonts, logo,
-favicon and chart palette API. See its [README](../devextreme-theme/README.md)
-for favicon setup, direct asset exports and internal-use licensing.
+The [base theme](../smbc-theme/README.md) owns canonical tokens, corporate fonts,
+logo and favicon. The [adapter](../smbc-devextreme-theme/README.md) owns DevExtreme
+styles and the chart palette API. Their READMEs describe exports and licensing.
 
 ## Typography and tokens
 
 - Myriad Pro is the default for application text, controls and operational headings.
 - Capitolium 2 is reserved for `font-brand` editorial/display headings.
 - Fonts, logo and favicon load from bundled assets, without external font services.
-- `../devextreme-theme/src/tokens.css` is the canonical source for palette,
+- `../smbc-theme/src/tokens.css` is the canonical source for palette,
   semantic roles, typography, spacing, borders, radii, focus, shadows and motion.
 - Components consume semantic roles rather than palette primitives.
 - ThemeBuilder metadata and visualization colours derive from the same tokens.
@@ -259,7 +262,7 @@ npm ci
 npm run check
 npm pack
 cd ../smbc-style
-npm install ../smbc-ui/smbc-ui-0.1.0.tgz
+npm install ../smbc-ui/smbc-ui-0.2.0.tgz
 npm run lint
 npm run typecheck
 npm run build
@@ -276,9 +279,9 @@ checks static imports, so review dynamic imports and widget configuration too.
 Reusable semantic components belong to the UI package. Application layout,
 loading/error arrangement and scrolling are composed with utilities in JSX.
 
-The three projects have separate responsibilities: `devextreme-theme` owns the
-visual theme and assets; `smbc-ui` owns reusable React components; `smbc-style`
-consumes both and demonstrates integration. They do not require a shared npm
+The four projects have separate responsibilities: `smbc-theme` owns tokens and
+corporate assets; `smbc-devextreme-theme` adapts DevExtreme; `smbc-ui` owns reusable
+React components; `smbc-style` consumes all three and demonstrates integration. They do not require a shared npm
 workspace. Install and test their built packages rather than source aliases.
 
 ### Layout ownership in shared components
@@ -295,3 +298,17 @@ workspace. Install and test their built packages rather than source aliases.
 `Field wide` and `Toolbar.Group` are removed. Use page layout classes for field
 spans and ordinary HTML inside `Toolbar.Item` templates. A text-only toolbar
 item can simply render a `span`. Card and TableShell remain semantic components.
+
+## Split theme packages (0.2.0 migration)
+
+`@smbc/theme@0.1.0` owns tokens, corporate fonts, brand assets and the Tailwind
+bridge. `@smbc/devextreme-theme@0.2.0` owns vendor CSS, overrides, icon fonts and
+chart palette registration. Import shared resources from `@smbc/theme`; old
+adapter resource exports and its root entry are removed.
+
+All four sibling projects are required for local development: `smbc-theme`,
+`smbc-devextreme-theme`, `smbc-ui`, `smbc-style`. Build/pack the base first, then
+adapter, UI and app. The base archive is `../smbc-theme/smbc-theme-0.1.0.tgz`;
+install it alongside the adapter archive (with `--save-dev` in UI).
+`Build-Updated` mode `Theme` rebuilds both themes and consumers; mode `Ui` uses
+installed themes. `Build-Clean` and `refresh:packages` cover the complete chain.

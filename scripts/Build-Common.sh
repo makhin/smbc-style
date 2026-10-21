@@ -43,8 +43,8 @@ install_project_dependencies() {
 }
 
 invoke_smbc_build() {
-    local mode=$1 update=$2 project theme_archive
-    local theme=./devextreme-theme ui=./smbc-ui app=./smbc-style
+    local mode=$1 update=$2 project theme_archive base_archive
+    local base=./smbc-theme theme=./smbc-devextreme-theme ui=./smbc-ui app=./smbc-style
     local archives=()
 
     command -v npm >/dev/null || { echo 'npm is required.' >&2; exit 1; }
@@ -57,9 +57,9 @@ invoke_smbc_build() {
         }
     '
 
-    for project in "$theme" "$ui" "$app"; do
+    for project in "$base" "$theme" "$ui" "$app"; do
         if [[ ! -f "$project/package.json" ]]; then
-            echo "Missing 'package.json' in '$project'. All three repositories must be sibling directories." >&2
+            echo "Missing 'package.json' in '$project'. All four repositories must be sibling directories." >&2
             exit 1
         fi
         if [[ "$mode" != clean && ! -d "$project/node_modules" ]]; then
@@ -70,17 +70,24 @@ invoke_smbc_build() {
 
     if [[ "$mode" == clean || "$update" != Ui ]]; then
         if [[ "$mode" == clean ]]; then
-            install_project_dependencies "$theme" --save-prod
+            install_project_dependencies "$base" --save-prod
+        fi
+        new_project_archive "$base"
+        base_archive=$project_archive
+        if [[ "$mode" == clean ]]; then
+            install_project_dependencies "$theme" --save-dev "$base_archive"
+        else
+            invoke_project_npm "$theme" install --include=dev --save-dev "$base_archive"
         fi
         new_project_archive "$theme"
         theme_archive=$project_archive
         if [[ "$mode" == clean ]]; then
-            install_project_dependencies "$ui" --save-dev "$theme_archive"
+            install_project_dependencies "$ui" --save-dev "$base_archive" "$theme_archive"
         else
             # Keep the registry peer range; only the UI devDependency is local.
-            invoke_project_npm "$ui" install --include=dev --save-dev "$theme_archive"
+            invoke_project_npm "$ui" install --include=dev --save-dev "$base_archive" "$theme_archive"
         fi
-        archives+=("$theme_archive")
+        archives+=("$base_archive" "$theme_archive")
     fi
 
     # Theme updates also rebuild UI against its updated Tailwind bridge.

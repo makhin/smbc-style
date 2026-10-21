@@ -1,5 +1,5 @@
 #!/bin/bash
-# Installs all three sibling projects from scratch and builds smbc-style.
+# Installs all four sibling projects from scratch and builds smbc-style.
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
