@@ -27,6 +27,37 @@ npm run build
 
 Application builds use the installed theme and do not regenerate it.
 
+### Windows: build without PowerShell scripts (recommended)
+
+Requires Node.js 22.12+ and npm 10+, with all four repositories checked out
+as sibling directories. In a regular terminal, open `smbc-style` and run:
+
+```powershell
+# First installation, or replace node_modules in all four projects:
+npm.cmd run build:clean
+
+# Subsequent builds using installed dependencies:
+npm.cmd run build:updated
+
+# Only UI changed:
+npm.cmd run build:updated -- Ui
+
+# Theme changed (also rebuilds UI):
+npm.cmd run build:updated -- Theme
+```
+
+No script copying, administrator privileges, global npm installs or execution-policy
+changes are required. `npm.cmd` explicitly selects the Windows npm launcher instead
+of `npm.ps1`. The orchestration runs in Node.js and calls npm's JavaScript CLI directly.
+Node/npm must be available and your account must have write access to the project
+folders and npm cache, plus access to your configured package registry.
+On macOS/Linux, use `npm` instead of `npm.cmd` with the same commands.
+
+The build order and clean/update behavior match the scripts below, including
+same-version archive integrity refresh, app lint and output in `smbc-style/dist`.
+Commands stop at the first failure. Review changes to package manifests and locks.
+Browser tests are not part of this build.
+
 ### PowerShell: build all four local projects
 
 Requires Node.js 22.12+ and npm 10+, Windows PowerShell 5.1 or PowerShell 7.

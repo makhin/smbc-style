@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:clean": "node scripts/build-local.mjs clean",
+    "build:updated": "node scripts/build-local.mjs updated",
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "preview": "vite preview",
